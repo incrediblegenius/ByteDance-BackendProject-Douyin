@@ -24,6 +24,7 @@ message user {
 message IdRequest {
   int64 id = 1 ;
   string token = 2 ;
+  bool need_token =3;
 }
 
 message douyin_feed_request {

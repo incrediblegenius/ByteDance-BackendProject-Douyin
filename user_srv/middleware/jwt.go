@@ -18,8 +18,8 @@ var (
 )
 
 type CustomClaims struct {
-	Id          uint
-	AuthorityId uint
+	Id          int64
+	AuthorityId int64
 	jwt.StandardClaims
 }
 

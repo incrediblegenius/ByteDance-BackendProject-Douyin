@@ -86,8 +86,9 @@ func GetUserInfo(ctx *gin.Context) {
 		return
 	}
 	rsp, err := userClient.UserSrvClient.GetUserById(context.Background(), &proto.IdRequest{
-		Id:    int64(id),
-		Token: token,
+		Id:        int64(id),
+		Token:     token,
+		NeedToken: true,
 	})
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
@@ -111,7 +112,7 @@ func GetFeed(ctx *gin.Context) {
 		tmp, _ := strconv.Atoi(latest_time)
 		t = int64(tmp)
 	} else {
-		t = time.Now().Unix()
+		t = time.Now().UnixMilli()
 	}
 	// fmt.Println(t)
 	rsp, _ := userClient.UserSrvClient.GetUserFeed(context.Background(), &proto.DouyinFeedRequest{

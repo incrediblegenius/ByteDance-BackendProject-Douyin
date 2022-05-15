@@ -36,7 +36,7 @@ func (s *UserRegisterServer) Register(ctx context.Context, req *proto.DouyinUser
 		}, nil
 	}
 	token, _ := global.Jwt.CreateToken(middleware.CustomClaims{
-		Id: uint(user.ID),
+		Id: int64(user.ID),
 	})
 	return &proto.DouyinUserRegisterResponse{
 		StatusCode: 0,
@@ -63,7 +63,7 @@ func (s *UserRegisterServer) Login(ctx context.Context, req *proto.DouyinUserReg
 		}, nil
 	}
 	token, _ := global.Jwt.CreateToken(middleware.CustomClaims{
-		Id: uint(user.ID),
+		Id: int64(user.ID),
 	})
 	return &proto.DouyinUserRegisterResponse{
 		StatusCode: 0,
@@ -74,10 +74,12 @@ func (s *UserRegisterServer) Login(ctx context.Context, req *proto.DouyinUserReg
 }
 
 func (s *UserRegisterServer) GetUserById(ctx context.Context, req *proto.IdRequest) (*proto.User, error) {
-	if req.Token != "" {
-		_, err := global.Jwt.ParseToken(req.Token)
+	if req.NeedToken {
+		claim, err := global.Jwt.ParseToken(req.Token)
 		if err != nil {
 			return nil, errors.New("token解析失败")
+		} else if claim.Id != int64(req.Id) {
+			return nil, errors.New("非法token")
 		}
 	}
 	var user model.User
@@ -118,7 +120,7 @@ func (s *UserRegisterServer) GetUserFeed(ctx context.Context, req *proto.DouyinF
 	}
 	var vis []*proto.Video
 	for _, v := range videos {
-		user, err := s.GetUserById(context.Background(), &proto.IdRequest{Id: int64(v.AuthorID)})
+		user, err := s.GetUserById(context.Background(), &proto.IdRequest{Id: int64(v.AuthorID), NeedToken: false})
 		if err != nil {
 			fmt.Println(err.Error())
 		}
