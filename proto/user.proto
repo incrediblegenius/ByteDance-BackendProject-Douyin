@@ -49,11 +49,22 @@ message Video{
   bool is_favorite = 7 ; // 是否已点赞
 }
 
+message douyin_publish_action_request{
+  int64 user_id = 1 ; //用户id
+  string token = 2 ; //用户鉴权token
+  bytes video = 3 ; //发布的视频数据
+}
+
+message douyin_publish_action_response{
+  int32 status_code = 1 ; //状态码,0-success, others-fail
+  string status_msg = 2 ; //状态消息
+}
 
 service UserRegister{
   rpc Register(douyin_user_register_request) returns (douyin_user_register_response);
   rpc Login(douyin_user_register_request) returns (douyin_user_register_response);
   rpc GetUserById(IdRequest) returns (user);
   rpc GetUserFeed(douyin_feed_request) returns (douyin_feed_response);
+  rpc PublishAction(douyin_publish_action_request) returns (douyin_publish_action_response);
 }
 

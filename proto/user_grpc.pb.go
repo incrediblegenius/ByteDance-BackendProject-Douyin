@@ -26,6 +26,7 @@ type UserRegisterClient interface {
 	Login(ctx context.Context, in *DouyinUserRegisterRequest, opts ...grpc.CallOption) (*DouyinUserRegisterResponse, error)
 	GetUserById(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*User, error)
 	GetUserFeed(ctx context.Context, in *DouyinFeedRequest, opts ...grpc.CallOption) (*DouyinFeedResponse, error)
+	PublishAction(ctx context.Context, in *DouyinPublishActionRequest, opts ...grpc.CallOption) (*DouyinPublishActionResponse, error)
 }
 
 type userRegisterClient struct {
@@ -72,6 +73,15 @@ func (c *userRegisterClient) GetUserFeed(ctx context.Context, in *DouyinFeedRequ
 	return out, nil
 }
 
+func (c *userRegisterClient) PublishAction(ctx context.Context, in *DouyinPublishActionRequest, opts ...grpc.CallOption) (*DouyinPublishActionResponse, error) {
+	out := new(DouyinPublishActionResponse)
+	err := c.cc.Invoke(ctx, "/UserRegister/PublishAction", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserRegisterServer is the server API for UserRegister service.
 // All implementations must embed UnimplementedUserRegisterServer
 // for forward compatibility
@@ -80,6 +90,7 @@ type UserRegisterServer interface {
 	Login(context.Context, *DouyinUserRegisterRequest) (*DouyinUserRegisterResponse, error)
 	GetUserById(context.Context, *IdRequest) (*User, error)
 	GetUserFeed(context.Context, *DouyinFeedRequest) (*DouyinFeedResponse, error)
+	PublishAction(context.Context, *DouyinPublishActionRequest) (*DouyinPublishActionResponse, error)
 	mustEmbedUnimplementedUserRegisterServer()
 }
 
@@ -98,6 +109,9 @@ func (UnimplementedUserRegisterServer) GetUserById(context.Context, *IdRequest) 
 }
 func (UnimplementedUserRegisterServer) GetUserFeed(context.Context, *DouyinFeedRequest) (*DouyinFeedResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserFeed not implemented")
+}
+func (UnimplementedUserRegisterServer) PublishAction(context.Context, *DouyinPublishActionRequest) (*DouyinPublishActionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PublishAction not implemented")
 }
 func (UnimplementedUserRegisterServer) mustEmbedUnimplementedUserRegisterServer() {}
 
@@ -184,6 +198,24 @@ func _UserRegister_GetUserFeed_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserRegister_PublishAction_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DouyinPublishActionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserRegisterServer).PublishAction(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/UserRegister/PublishAction",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserRegisterServer).PublishAction(ctx, req.(*DouyinPublishActionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserRegister_ServiceDesc is the grpc.ServiceDesc for UserRegister service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -206,6 +238,10 @@ var UserRegister_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetUserFeed",
 			Handler:    _UserRegister_GetUserFeed_Handler,
+		},
+		{
+			MethodName: "PublishAction",
+			Handler:    _UserRegister_PublishAction_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

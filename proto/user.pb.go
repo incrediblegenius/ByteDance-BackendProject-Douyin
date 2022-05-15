@@ -25,8 +25,8 @@ type DouyinUserRegisterRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Username string `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"` //注册用户名，最长32
-	Password string `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"` //密码，最长32
+	Username string `protobuf:"bytes,1,opt,name=username,proto3" json:"username"` //注册用户名，最长32
+	Password string `protobuf:"bytes,2,opt,name=password,proto3" json:"password"` //密码，最长32
 }
 
 func (x *DouyinUserRegisterRequest) Reset() {
@@ -80,10 +80,10 @@ type DouyinUserRegisterResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	StatusCode int32  `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code,omitempty"` //状态码,0-success, others-fail
-	StatusMsg  string `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg,omitempty"`     //状态消息
-	UserId     int64  `protobuf:"varint,3,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`             //用户id
-	Token      string `protobuf:"bytes,4,opt,name=token,proto3" json:"token,omitempty"`                              //用户鉴权token
+	StatusCode int32  `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code"` //状态码,0-success, others-fail
+	StatusMsg  string `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg"`     //状态消息
+	UserId     int64  `protobuf:"varint,3,opt,name=user_id,json=userId,proto3" json:"user_id"`             //用户id
+	Token      string `protobuf:"bytes,4,opt,name=token,proto3" json:"token"`                              //用户鉴权token
 }
 
 func (x *DouyinUserRegisterResponse) Reset() {
@@ -151,11 +151,11 @@ type User struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id            int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Name          string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	FollowCount   int64  `protobuf:"varint,3,opt,name=follow_count,json=followCount,proto3" json:"follow_count,omitempty"`
-	FollowerCount int64  `protobuf:"varint,4,opt,name=follower_count,json=followerCount,proto3" json:"follower_count,omitempty"`
-	IsFollow      bool   `protobuf:"varint,5,opt,name=is_follow,json=isFollow,proto3" json:"is_follow,omitempty"`
+	Id            int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id"`
+	Name          string `protobuf:"bytes,2,opt,name=name,proto3" json:"name"`
+	FollowCount   int64  `protobuf:"varint,3,opt,name=follow_count,json=followCount,proto3" json:"follow_count"`
+	FollowerCount int64  `protobuf:"varint,4,opt,name=follower_count,json=followerCount,proto3" json:"follower_count"`
+	IsFollow      bool   `protobuf:"varint,5,opt,name=is_follow,json=isFollow,proto3" json:"is_follow"`
 }
 
 func (x *User) Reset() {
@@ -230,8 +230,8 @@ type IdRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id        int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Token     string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`
+	Id        int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id"`
+	Token     string `protobuf:"bytes,2,opt,name=token,proto3" json:"token"`
 	NeedToken bool   `protobuf:"varint,3,opt,name=need_token,json=needToken,proto3" json:"need_token,omitempty"`
 }
 
@@ -293,8 +293,8 @@ type DouyinFeedRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	LatestTime int64  `protobuf:"varint,1,opt,name=latest_time,json=latestTime,proto3" json:"latest_time,omitempty"`
-	Token      string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`
+	LatestTime int64  `protobuf:"varint,1,opt,name=latest_time,json=latestTime,proto3" json:"latest_time"`
+	Token      string `protobuf:"bytes,2,opt,name=token,proto3" json:"token"`
 }
 
 func (x *DouyinFeedRequest) Reset() {
@@ -348,10 +348,10 @@ type DouyinFeedResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	StatusCode int32    `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code,omitempty"` //状态码,0-success, others-fail
-	StatusMsg  string   `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg,omitempty"`     //状态消息
-	VideoList  []*Video `protobuf:"bytes,3,rep,name=video_list,json=videoList,proto3" json:"video_list,omitempty"`
-	NextTime   int64    `protobuf:"varint,4,opt,name=next_time,json=nextTime,proto3" json:"next_time,omitempty"` // 本次的返回视频中时间戳最早的，作为下次请求的latest_time
+	StatusCode int32    `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code"` //状态码,0-success, others-fail
+	StatusMsg  string   `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg"`     //状态消息
+	VideoList  []*Video `protobuf:"bytes,3,rep,name=video_list,json=videoList,proto3" json:"video_list"`
+	NextTime   int64    `protobuf:"varint,4,opt,name=next_time,json=nextTime,proto3" json:"next_time"` // 本次的返回视频中时间戳最早的，作为下次请求的latest_time
 }
 
 func (x *DouyinFeedResponse) Reset() {
@@ -419,13 +419,13 @@ type Video struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id            int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`                                            // 视频唯一标识
-	Author        *User  `protobuf:"bytes,2,opt,name=author,proto3" json:"author,omitempty"`                                     // 视频作者信息
-	PlayUrl       string `protobuf:"bytes,3,opt,name=play_url,json=playUrl,proto3" json:"play_url,omitempty"`                    // 视频播放地址
-	CoverUrl      string `protobuf:"bytes,4,opt,name=cover_url,json=coverUrl,proto3" json:"cover_url,omitempty"`                 // 视频封面地址
-	FavoriteCount int64  `protobuf:"varint,5,opt,name=favorite_count,json=favoriteCount,proto3" json:"favorite_count,omitempty"` // 视频点赞数
-	CommentCount  int64  `protobuf:"varint,6,opt,name=comment_count,json=commentCount,proto3" json:"comment_count,omitempty"`    // 视频评论数
-	IsFavorite    bool   `protobuf:"varint,7,opt,name=is_favorite,json=isFavorite,proto3" json:"is_favorite,omitempty"`          // 是否已点赞
+	Id            int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id"`                                            // 视频唯一标识
+	Author        *User  `protobuf:"bytes,2,opt,name=author,proto3" json:"author"`                                     // 视频作者信息
+	PlayUrl       string `protobuf:"bytes,3,opt,name=play_url,json=playUrl,proto3" json:"play_url"`                    // 视频播放地址
+	CoverUrl      string `protobuf:"bytes,4,opt,name=cover_url,json=coverUrl,proto3" json:"cover_url"`                 // 视频封面地址
+	FavoriteCount int64  `protobuf:"varint,5,opt,name=favorite_count,json=favoriteCount,proto3" json:"favorite_count"` // 视频点赞数
+	CommentCount  int64  `protobuf:"varint,6,opt,name=comment_count,json=commentCount,proto3" json:"comment_count"`    // 视频评论数
+	IsFavorite    bool   `protobuf:"varint,7,opt,name=is_favorite,json=isFavorite,proto3" json:"is_favorite"`          // 是否已点赞
 }
 
 func (x *Video) Reset() {
@@ -509,6 +509,124 @@ func (x *Video) GetIsFavorite() bool {
 	return false
 }
 
+type DouyinPublishActionRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	UserId int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id"` //用户id
+	Token  string `protobuf:"bytes,2,opt,name=token,proto3" json:"token"`                  //用户鉴权token
+	Data   []byte `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`                    //发布的视频数据
+}
+
+func (x *DouyinPublishActionRequest) Reset() {
+	*x = DouyinPublishActionRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_user_proto_msgTypes[7]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DouyinPublishActionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DouyinPublishActionRequest) ProtoMessage() {}
+
+func (x *DouyinPublishActionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_user_proto_msgTypes[7]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DouyinPublishActionRequest.ProtoReflect.Descriptor instead.
+func (*DouyinPublishActionRequest) Descriptor() ([]byte, []int) {
+	return file_user_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *DouyinPublishActionRequest) GetUserId() int64 {
+	if x != nil {
+		return x.UserId
+	}
+	return 0
+}
+
+func (x *DouyinPublishActionRequest) GetToken() string {
+	if x != nil {
+		return x.Token
+	}
+	return ""
+}
+
+func (x *DouyinPublishActionRequest) GetData() []byte {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type DouyinPublishActionResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	StatusCode int32  `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code"` //状态码,0-success, others-fail
+	StatusMsg  string `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg"`     //状态消息
+}
+
+func (x *DouyinPublishActionResponse) Reset() {
+	*x = DouyinPublishActionResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_user_proto_msgTypes[8]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *DouyinPublishActionResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DouyinPublishActionResponse) ProtoMessage() {}
+
+func (x *DouyinPublishActionResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_user_proto_msgTypes[8]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DouyinPublishActionResponse.ProtoReflect.Descriptor instead.
+func (*DouyinPublishActionResponse) Descriptor() ([]byte, []int) {
+	return file_user_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *DouyinPublishActionResponse) GetStatusCode() int32 {
+	if x != nil {
+		return x.StatusCode
+	}
+	return 0
+}
+
+func (x *DouyinPublishActionResponse) GetStatusMsg() string {
+	if x != nil {
+		return x.StatusMsg
+	}
+	return ""
+}
+
 var File_user_proto protoreflect.FileDescriptor
 
 var file_user_proto_rawDesc = []byte{
@@ -570,24 +688,42 @@ var file_user_proto_rawDesc = []byte{
 	0x06, 0x20, 0x01, 0x28, 0x03, 0x52, 0x0c, 0x63, 0x6f, 0x6d, 0x6d, 0x65, 0x6e, 0x74, 0x43, 0x6f,
 	0x75, 0x6e, 0x74, 0x12, 0x1f, 0x0a, 0x0b, 0x69, 0x73, 0x5f, 0x66, 0x61, 0x76, 0x6f, 0x72, 0x69,
 	0x74, 0x65, 0x18, 0x07, 0x20, 0x01, 0x28, 0x08, 0x52, 0x0a, 0x69, 0x73, 0x46, 0x61, 0x76, 0x6f,
-	0x72, 0x69, 0x74, 0x65, 0x32, 0xff, 0x01, 0x0a, 0x0c, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x67,
-	0x69, 0x73, 0x74, 0x65, 0x72, 0x12, 0x49, 0x0a, 0x08, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65,
-	0x72, 0x12, 0x1d, 0x2e, 0x64, 0x6f, 0x75, 0x79, 0x69, 0x6e, 0x5f, 0x75, 0x73, 0x65, 0x72, 0x5f,
-	0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x5f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
-	0x1a, 0x1e, 0x2e, 0x64, 0x6f, 0x75, 0x79, 0x69, 0x6e, 0x5f, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x72,
-	0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x5f, 0x72, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x12, 0x46, 0x0a, 0x05, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x12, 0x1d, 0x2e, 0x64, 0x6f, 0x75, 0x79,
-	0x69, 0x6e, 0x5f, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72,
-	0x5f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1e, 0x2e, 0x64, 0x6f, 0x75, 0x79, 0x69,
-	0x6e, 0x5f, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x5f,
-	0x72, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x20, 0x0a, 0x0b, 0x47, 0x65, 0x74, 0x55,
-	0x73, 0x65, 0x72, 0x42, 0x79, 0x49, 0x64, 0x12, 0x0a, 0x2e, 0x49, 0x64, 0x52, 0x65, 0x71, 0x75,
-	0x65, 0x73, 0x74, 0x1a, 0x05, 0x2e, 0x75, 0x73, 0x65, 0x72, 0x12, 0x3a, 0x0a, 0x0b, 0x47, 0x65,
-	0x74, 0x55, 0x73, 0x65, 0x72, 0x46, 0x65, 0x65, 0x64, 0x12, 0x14, 0x2e, 0x64, 0x6f, 0x75, 0x79,
-	0x69, 0x6e, 0x5f, 0x66, 0x65, 0x65, 0x64, 0x5f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a,
-	0x15, 0x2e, 0x64, 0x6f, 0x75, 0x79, 0x69, 0x6e, 0x5f, 0x66, 0x65, 0x65, 0x64, 0x5f, 0x72, 0x65,
-	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x09, 0x5a, 0x07, 0x2e, 0x3b, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x72, 0x69, 0x74, 0x65, 0x22, 0x62, 0x0a, 0x1d, 0x64, 0x6f, 0x75, 0x79, 0x69, 0x6e, 0x5f, 0x70,
+	0x75, 0x62, 0x6c, 0x69, 0x73, 0x68, 0x5f, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x17, 0x0a, 0x07, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x69, 0x64,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x12, 0x14,
+	0x0a, 0x05, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x74,
+	0x6f, 0x6b, 0x65, 0x6e, 0x12, 0x12, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x03, 0x20, 0x01,
+	0x28, 0x0c, 0x52, 0x04, 0x64, 0x61, 0x74, 0x61, 0x22, 0x60, 0x0a, 0x1e, 0x64, 0x6f, 0x75, 0x79,
+	0x69, 0x6e, 0x5f, 0x70, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68, 0x5f, 0x61, 0x63, 0x74, 0x69, 0x6f,
+	0x6e, 0x5f, 0x72, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x1f, 0x0a, 0x0b, 0x73, 0x74,
+	0x61, 0x74, 0x75, 0x73, 0x5f, 0x63, 0x6f, 0x64, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52,
+	0x0a, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x43, 0x6f, 0x64, 0x65, 0x12, 0x1d, 0x0a, 0x0a, 0x73,
+	0x74, 0x61, 0x74, 0x75, 0x73, 0x5f, 0x6d, 0x73, 0x67, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52,
+	0x09, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x4d, 0x73, 0x67, 0x32, 0xd1, 0x02, 0x0a, 0x0c, 0x55,
+	0x73, 0x65, 0x72, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x12, 0x49, 0x0a, 0x08, 0x52,
+	0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x12, 0x1d, 0x2e, 0x64, 0x6f, 0x75, 0x79, 0x69, 0x6e,
+	0x5f, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x5f, 0x72,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1e, 0x2e, 0x64, 0x6f, 0x75, 0x79, 0x69, 0x6e, 0x5f,
+	0x75, 0x73, 0x65, 0x72, 0x5f, 0x72, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x5f, 0x72, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x46, 0x0a, 0x05, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x12,
+	0x1d, 0x2e, 0x64, 0x6f, 0x75, 0x79, 0x69, 0x6e, 0x5f, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x72, 0x65,
+	0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x5f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1e,
+	0x2e, 0x64, 0x6f, 0x75, 0x79, 0x69, 0x6e, 0x5f, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x72, 0x65, 0x67,
+	0x69, 0x73, 0x74, 0x65, 0x72, 0x5f, 0x72, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x20,
+	0x0a, 0x0b, 0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x42, 0x79, 0x49, 0x64, 0x12, 0x0a, 0x2e,
+	0x49, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x05, 0x2e, 0x75, 0x73, 0x65, 0x72,
+	0x12, 0x3a, 0x0a, 0x0b, 0x47, 0x65, 0x74, 0x55, 0x73, 0x65, 0x72, 0x46, 0x65, 0x65, 0x64, 0x12,
+	0x14, 0x2e, 0x64, 0x6f, 0x75, 0x79, 0x69, 0x6e, 0x5f, 0x66, 0x65, 0x65, 0x64, 0x5f, 0x72, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x15, 0x2e, 0x64, 0x6f, 0x75, 0x79, 0x69, 0x6e, 0x5f, 0x66,
+	0x65, 0x65, 0x64, 0x5f, 0x72, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x50, 0x0a, 0x0d,
+	0x50, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68, 0x41, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x1e, 0x2e,
+	0x64, 0x6f, 0x75, 0x79, 0x69, 0x6e, 0x5f, 0x70, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68, 0x5f, 0x61,
+	0x63, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1f, 0x2e,
+	0x64, 0x6f, 0x75, 0x79, 0x69, 0x6e, 0x5f, 0x70, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68, 0x5f, 0x61,
+	0x63, 0x74, 0x69, 0x6f, 0x6e, 0x5f, 0x72, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x09,
+	0x5a, 0x07, 0x2e, 0x3b, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x33,
 }
 
 var (
@@ -602,15 +738,17 @@ func file_user_proto_rawDescGZIP() []byte {
 	return file_user_proto_rawDescData
 }
 
-var file_user_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
+var file_user_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_user_proto_goTypes = []interface{}{
-	(*DouyinUserRegisterRequest)(nil),  // 0: douyin_user_register_request
-	(*DouyinUserRegisterResponse)(nil), // 1: douyin_user_register_response
-	(*User)(nil),                       // 2: user
-	(*IdRequest)(nil),                  // 3: IdRequest
-	(*DouyinFeedRequest)(nil),          // 4: douyin_feed_request
-	(*DouyinFeedResponse)(nil),         // 5: douyin_feed_response
-	(*Video)(nil),                      // 6: Video
+	(*DouyinUserRegisterRequest)(nil),   // 0: douyin_user_register_request
+	(*DouyinUserRegisterResponse)(nil),  // 1: douyin_user_register_response
+	(*User)(nil),                        // 2: user
+	(*IdRequest)(nil),                   // 3: IdRequest
+	(*DouyinFeedRequest)(nil),           // 4: douyin_feed_request
+	(*DouyinFeedResponse)(nil),          // 5: douyin_feed_response
+	(*Video)(nil),                       // 6: Video
+	(*DouyinPublishActionRequest)(nil),  // 7: douyin_publish_action_request
+	(*DouyinPublishActionResponse)(nil), // 8: douyin_publish_action_response
 }
 var file_user_proto_depIdxs = []int32{
 	6, // 0: douyin_feed_response.video_list:type_name -> Video
@@ -619,12 +757,14 @@ var file_user_proto_depIdxs = []int32{
 	0, // 3: UserRegister.Login:input_type -> douyin_user_register_request
 	3, // 4: UserRegister.GetUserById:input_type -> IdRequest
 	4, // 5: UserRegister.GetUserFeed:input_type -> douyin_feed_request
-	1, // 6: UserRegister.Register:output_type -> douyin_user_register_response
-	1, // 7: UserRegister.Login:output_type -> douyin_user_register_response
-	2, // 8: UserRegister.GetUserById:output_type -> user
-	5, // 9: UserRegister.GetUserFeed:output_type -> douyin_feed_response
-	6, // [6:10] is the sub-list for method output_type
-	2, // [2:6] is the sub-list for method input_type
+	7, // 6: UserRegister.PublishAction:input_type -> douyin_publish_action_request
+	1, // 7: UserRegister.Register:output_type -> douyin_user_register_response
+	1, // 8: UserRegister.Login:output_type -> douyin_user_register_response
+	2, // 9: UserRegister.GetUserById:output_type -> user
+	5, // 10: UserRegister.GetUserFeed:output_type -> douyin_feed_response
+	8, // 11: UserRegister.PublishAction:output_type -> douyin_publish_action_response
+	7, // [7:12] is the sub-list for method output_type
+	2, // [2:7] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name
 	2, // [2:2] is the sub-list for extension extendee
 	0, // [0:2] is the sub-list for field type_name
@@ -720,6 +860,30 @@ func file_user_proto_init() {
 				return nil
 			}
 		}
+		file_user_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DouyinPublishActionRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_user_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*DouyinPublishActionResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -727,7 +891,7 @@ func file_user_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_user_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   7,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

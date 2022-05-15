@@ -8,6 +8,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"sort"
 	"time"
 )
@@ -90,11 +91,11 @@ func (s *UserRegisterServer) GetUserById(ctx context.Context, req *proto.IdReque
 	}
 	ans.Name = user.UserName
 	ans.Id = int64(user.ID)
-	var cnt int64
-	global.DB.Where(&model.Relation{FollowFrom: int(req.Id)}).Count(&cnt)
-	ans.FollowCount = cnt
-	global.DB.Where(&model.Relation{FollowTo: int(req.Id)}).Count(&cnt)
-	ans.FollowerCount = cnt
+	var r []model.Relation
+	global.DB.Where(&model.Relation{FollowFrom: int(req.Id)}).Find(&r)
+	ans.FollowCount = int64(len(r))
+	global.DB.Where(&model.Relation{FollowTo: int(req.Id)}).Find(&r)
+	ans.FollowerCount = int64(len(r))
 	ans.IsFollow = false
 	return ans, nil
 }
@@ -110,7 +111,7 @@ func (s *UserRegisterServer) GetUserFeed(ctx context.Context, req *proto.DouyinF
 		}
 	}
 	var videos []model.Video
-	result := global.DB.Limit(30).Find(&videos, "update_time > ?", time.UnixMilli(req.LatestTime))
+	result := global.DB.Limit(30).Find(&videos, "update_time < ?", time.UnixMilli(req.LatestTime))
 	if result.Error != nil {
 		// fmt.Println("查询失败")
 		return &proto.DouyinFeedResponse{
@@ -118,11 +119,18 @@ func (s *UserRegisterServer) GetUserFeed(ctx context.Context, req *proto.DouyinF
 			StatusMsg:  "查询失败",
 		}, nil
 	}
+	if len(videos) == 0 {
+		return &proto.DouyinFeedResponse{
+			StatusCode: 0,
+			StatusMsg:  "无更多视频",
+		}, nil
+	}
 	var vis []*proto.Video
 	for _, v := range videos {
 		user, err := s.GetUserById(context.Background(), &proto.IdRequest{Id: int64(v.AuthorID), NeedToken: false})
 		if err != nil {
-			fmt.Println(err.Error())
+			// fmt.Println(err.Error())
+			return nil, err
 		}
 		vis = append(vis, &proto.Video{
 			Id:            int64(v.ID),
@@ -137,7 +145,7 @@ func (s *UserRegisterServer) GetUserFeed(ctx context.Context, req *proto.DouyinF
 	var nextTime int64
 	if len(videos) > 0 {
 		sort.Slice(videos, func(i, j int) bool {
-			return videos[i].UpdatedAt.UnixMilli() < videos[j].UpdatedAt.UnixMilli()
+			return videos[i].UpdatedAt.UnixMilli() > videos[j].UpdatedAt.UnixMilli()
 		})
 		nextTime = videos[len(videos)-1].UpdatedAt.UnixMilli()
 	} else {
@@ -148,5 +156,45 @@ func (s *UserRegisterServer) GetUserFeed(ctx context.Context, req *proto.DouyinF
 		StatusMsg:  "success",
 		VideoList:  vis,
 		NextTime:   nextTime,
+	}, nil
+}
+
+func (s *UserRegisterServer) PublishAction(ctx context.Context, req *proto.DouyinPublishActionRequest) (*proto.DouyinPublishActionResponse, error) {
+	claim, err := global.Jwt.ParseToken(req.Token)
+	if err != nil {
+		return &proto.DouyinPublishActionResponse{
+			StatusCode: -2,
+			StatusMsg:  "token鉴权失败",
+		}, nil
+	}
+	serverIP := "10.252.138.8"
+	// TODO
+
+	id := int(claim.Id)
+	filename := fmt.Sprintf("%d_%d.mp4", id, time.Now().UnixMilli())
+	err = ioutil.WriteFile("./videos/"+filename, req.Data, 0644)
+	if err != nil {
+		fmt.Println(err.Error())
+		return &proto.DouyinPublishActionResponse{
+			StatusCode: -1,
+			StatusMsg:  "写入文件失败",
+		}, nil
+	}
+	video := &model.Video{
+		AuthorID:   id,
+		PlayUrl:    "http://" + serverIP + ":8081/" + filename,
+		CoverUrl:   "http://" + serverIP + ":8081/" + filename,
+		IsFavorite: false,
+	}
+	result := global.DB.Create(&video)
+	if result.Error != nil {
+		return &proto.DouyinPublishActionResponse{
+			StatusCode: -1,
+			StatusMsg:  "上传失败",
+		}, nil
+	}
+	return &proto.DouyinPublishActionResponse{
+		StatusCode: 0,
+		StatusMsg:  "视频上传成功",
 	}, nil
 }
