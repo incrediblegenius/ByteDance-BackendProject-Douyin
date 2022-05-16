@@ -25,8 +25,8 @@ func (s *UserRegisterServer) PublishAction(ctx context.Context, req *proto.Douyi
 
 	video := &model.Video{
 		AuthorID:   id,
-		PlayUrl:    fmt.Sprintf("http://%s:%d/videos/%s", cfg.ServerIP, cfg.ServerPort, filename),
-		CoverUrl:   fmt.Sprintf("http://%s:%d/covers/%s", cfg.ServerIP, cfg.ServerPort, filename),
+		PlayUrl:    fmt.Sprintf("http://%s:%d/videos/%s.mp4", cfg.ServerIP, cfg.ServerPort, filename),
+		CoverUrl:   fmt.Sprintf("http://%s:%d/covers/%s.png", cfg.ServerIP, cfg.ServerPort, filename),
 		IsFavorite: false,
 	}
 	result := global.DB.Create(&video)
