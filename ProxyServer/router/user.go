@@ -17,6 +17,10 @@ func InitRouter(Router *gin.Engine) {
 	r = Router.Group("/douyin")
 	{
 		r.GET("/feed", handler.GetFeed)
-		r.POST("/publish/action/", handler.Publish)
+	}
+	r = Router.Group("/douyin/publish")
+	{
+		r.POST("/action/", handler.Publish)
+		r.GET("/list/", handler.PublishList)
 	}
 }

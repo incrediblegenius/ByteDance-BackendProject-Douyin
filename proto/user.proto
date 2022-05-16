@@ -50,14 +50,23 @@ message Video{
 }
 
 message douyin_publish_action_request{
-  int64 user_id = 1 ; //用户id
   string token = 2 ; //用户鉴权token
-  bytes video = 3 ; //发布的视频数据
+  string video_name = 3 ; //发布的视频的名字
 }
 
 message douyin_publish_action_response{
   int32 status_code = 1 ; //状态码,0-success, others-fail
   string status_msg = 2 ; //状态消息
+}
+
+message douyin_publish_list_request{
+  string token = 1 ; //用户鉴权token
+}
+
+message douyin_publish_list_response{
+  int32 status_code = 1 ; //状态码,0-success, others-fail
+  string status_msg = 2 ; //状态消息
+  repeated Video video_list = 3 ; // 用户的视频列表
 }
 
 service UserRegister{
@@ -66,5 +75,6 @@ service UserRegister{
   rpc GetUserById(IdRequest) returns (user);
   rpc GetUserFeed(douyin_feed_request) returns (douyin_feed_response);
   rpc PublishAction(douyin_publish_action_request) returns (douyin_publish_action_response);
+  rpc PublishList(douyin_publish_list_request) returns (douyin_publish_list_response);
 }
 

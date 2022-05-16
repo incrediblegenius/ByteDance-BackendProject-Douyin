@@ -6,7 +6,6 @@ import (
 	"context"
 	"net/http"
 	"strconv"
-	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -102,44 +101,4 @@ func GetUserInfo(ctx *gin.Context) {
 		"status_msg":  "success",
 		"user":        rsp,
 	})
-}
-
-func GetFeed(ctx *gin.Context) {
-	latest_time := ctx.Query("latest_time")
-	token := ctx.Query("token")
-	var t int64
-	if latest_time != "" {
-		tmp, _ := strconv.Atoi(latest_time)
-		t = int64(tmp)
-	} else {
-		t = time.Now().UnixMilli()
-	}
-	// fmt.Println(t)
-	rsp, _ := userClient.UserSrvClient.GetUserFeed(context.Background(), &proto.DouyinFeedRequest{
-		LatestTime: t,
-		Token:      token,
-	})
-	// fmt.Println(rsp)
-	ctx.JSON(http.StatusOK, rsp)
-
-}
-
-func Publish(ctx *gin.Context) {
-	token := ctx.PostForm("token")
-	data, _ := ctx.FormFile("data")
-	f, _ := data.Open()
-	defer f.Close()
-	buf := make([]byte, data.Size)
-	f.Read(buf)
-	// os.MkdirAll("./tmp/", 0777)
-	// err := ioutil.WriteFile("./tmp/test.mp4", buf, 0644)
-	// ctx.SaveUploadedFile(data, "./tmp/data")
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	rsp, _ := userClient.UserSrvClient.PublishAction(context.Background(), &proto.DouyinPublishActionRequest{
-		Token: token,
-		Data:  buf,
-	})
-	ctx.JSON(http.StatusOK, rsp)
 }

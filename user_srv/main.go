@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Douyin/cfg"
 	grpcserver "Douyin/user_srv/grpcServer"
 	"flag"
 	"net/http"
@@ -19,8 +20,10 @@ func main() {
 	//	}
 	//}()
 	go func() {
-		os.MkdirAll("./videos", 0777)
-		http.Handle("/", http.FileServer(http.Dir("./videos")))
+		os.MkdirAll(cfg.StaticDir+"/videos", 0777)
+		os.MkdirAll(cfg.StaticDir+"/covers", 0777)
+		os.MkdirAll(cfg.StaticDir+"/tmp", 0777)
+		http.Handle("/", http.FileServer(http.Dir(cfg.StaticDir)))
 		if e := http.ListenAndServe(":8081", nil); e != nil {
 			glog.Fatal(e)
 		}
