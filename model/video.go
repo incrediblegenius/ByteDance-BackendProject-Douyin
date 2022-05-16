@@ -11,5 +11,12 @@ type Video struct {
 	CoverUrl      string    `gorm:"type:varchar(255)"`
 	FavoriteCount int       `gorm:"default:0"`
 	CommentCount  int       `gorm:"default:0"`
-	IsFavorite    bool      `gorm:"default:false"`
+}
+
+type FavoriteVideo struct {
+	BaseModel
+	Video   Video `gorm:"foreignkey:VideoID"`
+	VideoID int   `gorm:"index:idx_videoid;not null"`
+	User    User  `gorm:"foreignkey:UserID"`
+	UserID  int   `gorm:"index:idx_userid;not null"`
 }

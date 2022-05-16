@@ -50,7 +50,7 @@ func (s *UserRegisterServer) GetUserFeed(ctx context.Context, req *proto.DouyinF
 			CoverUrl:      v.CoverUrl,
 			FavoriteCount: int64(v.FavoriteCount),
 			CommentCount:  int64(v.CommentCount),
-			IsFavorite:    v.IsFavorite,
+			IsFavorite:    false, // TODO 判断这个视频是否自己喜欢
 		})
 	}
 	var nextTime int64

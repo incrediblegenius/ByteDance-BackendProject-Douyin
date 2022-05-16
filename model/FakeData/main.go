@@ -12,6 +12,7 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -22,12 +23,13 @@ func main() {
 	cnt := 0
 	rand.Seed(time.Now().UnixMilli())
 	ch := make(chan struct{}, 10)
-	// mutex := &sync.Mutex{}
+	wg := &sync.WaitGroup{}
 	for input.Scan() {
-		if (cnt+1)%100 == 0 {
+		if (cnt+1)%80 == 0 {
 			// 并发下载，之后写（需要考虑文件io的并发）
 			url := input.Text()
 			ch <- struct{}{}
+			wg.Add(1)
 			go func(url string, cnt int) {
 				ID := rand.Intn(1000) + 1
 
@@ -55,10 +57,9 @@ func main() {
 				// mutex.Unlock()
 				defer resp.Body.Close()
 				result := global.DB.Create(&model.Video{
-					AuthorID:   ID,
-					PlayUrl:    url,
-					CoverUrl:   fmt.Sprintf("http://%s:%d/covers/%s.png", cfg.ServerIP, cfg.ServerPort, filename),
-					IsFavorite: false,
+					AuthorID: ID,
+					PlayUrl:  url,
+					CoverUrl: fmt.Sprintf("http://%s:%d/covers/%s.png", cfg.ServerIP, cfg.ServerPort, filename),
 				})
 				if result.Error != nil {
 					fmt.Println("插入失败")
@@ -66,10 +67,12 @@ func main() {
 				os.Rename(fmt.Sprintf("/Users/evil/Desktop/Go/Douyin/model/FakeData/test%d.png", cnt), cfg.StaticDir+"/covers/"+filename+".png")
 				os.Remove(fmt.Sprintf("/Users/evil/Desktop/Go/Douyin/model/FakeData/test%d.mp4", cnt))
 				<-ch
+				wg.Done()
 			}(url, cnt)
 		}
 		cnt++
 	}
+	wg.Wait()
 	// vs := []model.Video{}
 	// global.DB.Find(&vs)
 	// fmt.Println(len(vs))

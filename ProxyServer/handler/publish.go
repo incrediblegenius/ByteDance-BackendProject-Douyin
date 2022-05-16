@@ -62,6 +62,7 @@ func PublishList(ctx *gin.Context) {
 	rsp, _ := userClient.UserSrvClient.PublishList(context.Background(), &proto.DouyinPublishListRequest{
 		Token: token,
 	})
+	// fmt.Println(rsp)
 	ctx.JSON(http.StatusOK, rsp)
 }
 

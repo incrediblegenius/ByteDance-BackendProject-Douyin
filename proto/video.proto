@@ -1,0 +1,19 @@
+syntax = "proto3";
+option go_package = ".;proto";
+
+
+message douyin_favorite_action_request{
+    int64 user_id = 1 ;
+    string token = 2 ;
+    int64 video_id = 3 ;
+    int32 action = 4 ;  //1:favorite,2:unfavorite
+}
+
+message douyin_favorite_action_response{
+    int32 status_code = 1 ;
+    string status_msg = 2 ;
+}
+
+service Videos {
+    rpc FavoriteAction(douyin_favorite_action_request) returns (douyin_favorite_action_response);
+}
