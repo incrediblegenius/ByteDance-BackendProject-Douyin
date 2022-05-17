@@ -69,12 +69,37 @@ message douyin_publish_list_response{
   repeated Video video_list = 3 ; // 用户的视频列表
 }
 
-service UserRegister{
+message douyin_favorite_list_request{
+  int64 user_id = 1 ;
+  string token = 2 ;
+}
+
+message douyin_favorite_list_response{
+  int32 status_code = 1 ;
+  string status_msg = 2 ;
+  repeated Video video_list = 3 ;
+}
+
+message douyin_favorite_action_request{
+  int64 user_id = 1 ;
+  string token = 2 ;
+  int64 video_id = 3 ;
+  int32 action = 4 ;  //1:favorite,2:unfavorite
+}
+
+message douyin_favorite_action_response{
+  int32 status_code = 1 ;
+  string status_msg = 2 ;
+}
+
+service Server{
   rpc Register(douyin_user_register_request) returns (douyin_user_register_response);
   rpc Login(douyin_user_register_request) returns (douyin_user_register_response);
   rpc GetUserById(IdRequest) returns (user);
   rpc GetUserFeed(douyin_feed_request) returns (douyin_feed_response);
   rpc PublishAction(douyin_publish_action_request) returns (douyin_publish_action_response);
   rpc PublishList(douyin_publish_list_request) returns (douyin_publish_list_response);
+  rpc FavoriteAction(douyin_favorite_action_request) returns (douyin_favorite_action_response);
+  rpc FavoriteList(douyin_favorite_list_request) returns (douyin_favorite_list_response);
 }
 

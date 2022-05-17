@@ -9,11 +9,7 @@ import (
 	"errors"
 )
 
-type UserRegisterServer struct {
-	proto.UnimplementedUserRegisterServer
-}
-
-func (s *UserRegisterServer) Register(ctx context.Context, req *proto.DouyinUserRegisterRequest) (*proto.DouyinUserRegisterResponse, error) {
+func (s *Server) Register(ctx context.Context, req *proto.DouyinUserRegisterRequest) (*proto.DouyinUserRegisterResponse, error) {
 	username, password := req.Username, req.Password
 	var user model.User
 	result := global.DB.Where(&model.User{UserName: username}).First(&user)
@@ -43,7 +39,7 @@ func (s *UserRegisterServer) Register(ctx context.Context, req *proto.DouyinUser
 	}, nil
 }
 
-func (s *UserRegisterServer) Login(ctx context.Context, req *proto.DouyinUserRegisterRequest) (*proto.DouyinUserRegisterResponse, error) {
+func (s *Server) Login(ctx context.Context, req *proto.DouyinUserRegisterRequest) (*proto.DouyinUserRegisterResponse, error) {
 	username, password := req.Username, req.Password
 	var user model.User
 	result := global.DB.Where(&model.User{UserName: username}).First(&user)
@@ -70,7 +66,7 @@ func (s *UserRegisterServer) Login(ctx context.Context, req *proto.DouyinUserReg
 	}, nil
 }
 
-func (s *UserRegisterServer) GetUserById(ctx context.Context, req *proto.IdRequest) (*proto.User, error) {
+func (s *Server) GetUserById(ctx context.Context, req *proto.IdRequest) (*proto.User, error) {
 	if req.NeedToken {
 		claim, err := global.Jwt.ParseToken(req.Token)
 		if err != nil {

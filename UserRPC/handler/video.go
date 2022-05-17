@@ -1,23 +1,22 @@
 package handler
 
 import (
-	"Douyin/model"
-	"Douyin/proto/videoproto"
-	"Douyin/user_srv/global"
+	"UserServer/global"
+	"UserServer/model"
+	"UserServer/proto"
 	"context"
-	"errors"
 
 	"gorm.io/gorm"
 )
 
-type VideosServer struct {
-	videoproto.UnimplementedVideosServer
+type Server struct {
+	proto.UnimplementedServerServer
 }
 
-func (s *VideosServer) FavoriteAction(ctx context.Context, req *videoproto.DouyinFavoriteActionRequest) (*videoproto.DouyinFavoriteActionResponse, error) {
+func (s *Server) FavoriteAction(ctx context.Context, req *proto.DouyinFavoriteActionRequest) (*proto.DouyinFavoriteActionResponse, error) {
 	claim, err := global.Jwt.ParseToken(req.Token)
 	if err != nil {
-		return &videoproto.DouyinFavoriteActionResponse{
+		return &proto.DouyinFavoriteActionResponse{
 			StatusCode: -2,
 			StatusMsg:  "token鉴权失败",
 		}, nil
@@ -55,43 +54,21 @@ func (s *VideosServer) FavoriteAction(ctx context.Context, req *videoproto.Douyi
 			return nil
 		})
 	} else {
-		return &videoproto.DouyinFavoriteActionResponse{
+		return &proto.DouyinFavoriteActionResponse{
 			StatusCode: -1,
 			StatusMsg:  "操作请求与实际不符",
 		}, nil
 	}
-	return &videoproto.DouyinFavoriteActionResponse{
+	return &proto.DouyinFavoriteActionResponse{
 		StatusCode: 0,
 		StatusMsg:  "操作成功",
 	}, nil
 }
 
-func (s *VideosServer) GetUserById(ctx context.Context, req *videoproto.OthersRequest) (*videoproto.User, error) {
-	ans := &videoproto.User{}
-	var user model.User
-	result := global.DB.First(&user, req.Id)
-	if result.RowsAffected == 0 {
-		return nil, errors.New("未找到用户")
-	}
-	ans.Name = user.UserName
-	ans.Id = int64(user.ID)
-	var cnt int64
-	global.DB.Model(&model.Relation{}).Where("follow_from = ?", req.Id).Count(&cnt)
-	ans.FollowCount = cnt
-	global.DB.Model(&model.Relation{}).Where("follow_to = ?", req.Id).Count(&cnt)
-	ans.FollowerCount = cnt
-	if result := global.DB.First(&model.Relation{}, "follow_from = ? and follow_to = ?", req.CheckFrom, req.Id); result.RowsAffected == 1 {
-		ans.IsFollow = true
-	} else {
-		ans.IsFollow = false
-	}
-	return ans, nil
-}
-
-// func (s *VideosServer) FavoriteList(ctx context.Context, req *videoproto.DouyinFavoriteListRequest) (*videoproto.DouyinFavoriteListResponse, error) {
+// func (s *Server) FavoriteList(ctx context.Context, req *proto.DouyinFavoriteListRequest) (*proto.DouyinFavoriteListResponse, error) {
 // 	claim, err := global.Jwt.ParseToken(req.Token)
 // 	if err != nil {
-// 		return &videoproto.DouyinFavoriteListResponse{
+// 		return &proto.DouyinFavoriteListResponse{
 // 			StatusCode: -2,
 // 			StatusMsg:  "token鉴权失败",
 // 		}, nil

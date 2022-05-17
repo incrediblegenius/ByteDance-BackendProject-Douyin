@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func (s *UserRegisterServer) GetUserFeed(ctx context.Context, req *proto.DouyinFeedRequest) (*proto.DouyinFeedResponse, error) {
+func (s *Server) GetUserFeed(ctx context.Context, req *proto.DouyinFeedRequest) (*proto.DouyinFeedResponse, error) {
 	uid := 0
 	if req.Token != "" {
 		claim, err := global.Jwt.ParseToken(req.Token)

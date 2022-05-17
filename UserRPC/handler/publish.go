@@ -9,7 +9,7 @@ import (
 	"fmt"
 )
 
-func (s *UserRegisterServer) PublishAction(ctx context.Context, req *proto.DouyinPublishActionRequest) (*proto.DouyinPublishActionResponse, error) {
+func (s *Server) PublishAction(ctx context.Context, req *proto.DouyinPublishActionRequest) (*proto.DouyinPublishActionResponse, error) {
 	claim, err := global.Jwt.ParseToken(req.Token)
 	if err != nil {
 		// os.Remove("../videos/" + req.VideoName)
@@ -40,7 +40,7 @@ func (s *UserRegisterServer) PublishAction(ctx context.Context, req *proto.Douyi
 	}, nil
 }
 
-func (s *UserRegisterServer) PublishList(ctx context.Context, req *proto.DouyinPublishListRequest) (*proto.DouyinPublishListResponse, error) {
+func (s *Server) PublishList(ctx context.Context, req *proto.DouyinPublishListRequest) (*proto.DouyinPublishListResponse, error) {
 	claim, err := global.Jwt.ParseToken(req.Token)
 	if err != nil {
 		return &proto.DouyinPublishListResponse{

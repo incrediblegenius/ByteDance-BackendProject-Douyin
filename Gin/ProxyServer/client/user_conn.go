@@ -1,14 +1,14 @@
 package client
 
 import (
-	"Douyin/proto/userproto"
+	"Douyin/proto"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
 var (
-	UserSrvClient userproto.UserRegisterClient
+	SrvClient proto.ServerClient
 )
 
 func init() {
@@ -16,5 +16,5 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	UserSrvClient = userproto.NewUserRegisterClient(conn)
+	SrvClient = proto.NewServerClient(conn)
 }

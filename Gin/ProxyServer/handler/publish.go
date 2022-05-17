@@ -4,7 +4,7 @@ import (
 	"Douyin/ProxyServer/client"
 	"Douyin/cfg"
 
-	"Douyin/proto/userproto"
+	"Douyin/proto"
 	"context"
 	"fmt"
 	"io/ioutil"
@@ -35,7 +35,7 @@ func Publish(ctx *gin.Context) {
 		c <- err
 	}(data)
 
-	rsp, err := client.UserSrvClient.PublishAction(context.Background(), &userproto.DouyinPublishActionRequest{
+	rsp, err := client.SrvClient.PublishAction(context.Background(), &proto.DouyinPublishActionRequest{
 		Token:     token,
 		VideoName: filename,
 	})
@@ -60,7 +60,7 @@ func Publish(ctx *gin.Context) {
 
 func PublishList(ctx *gin.Context) {
 	token := ctx.Query("token")
-	rsp, _ := client.UserSrvClient.PublishList(context.Background(), &userproto.DouyinPublishListRequest{
+	rsp, _ := client.SrvClient.PublishList(context.Background(), &proto.DouyinPublishListRequest{
 		Token: token,
 	})
 	// fmt.Println(rsp)

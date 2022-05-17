@@ -2,7 +2,7 @@ package handler
 
 import (
 	"Douyin/ProxyServer/client"
-	"Douyin/proto/videoproto"
+	"Douyin/proto"
 	"context"
 	"net/http"
 	"strconv"
@@ -19,7 +19,7 @@ func FavoriteAction(ctx *gin.Context) {
 	vid, _ := strconv.Atoi(video_id)
 	ac, _ := strconv.Atoi(action_type)
 
-	rsp, err := client.VideoClient.FavoriteAction(context.Background(), &videoproto.DouyinFavoriteActionRequest{
+	rsp, err := client.SrvClient.FavoriteAction(context.Background(), &proto.DouyinFavoriteActionRequest{
 		Token:   token,
 		UserId:  int64(uid),
 		VideoId: int64(vid),

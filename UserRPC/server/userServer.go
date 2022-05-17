@@ -11,7 +11,7 @@ import (
 
 func Run() error {
 	server := grpc.NewServer()
-	proto.RegisterUserRegisterServer(server, &handler.UserRegisterServer{})
+	proto.RegisterServerServer(server, &handler.Server{})
 	lis, err := net.Listen("tcp", "localhost:8888")
 	if err != nil {
 		panic(err)

@@ -2,7 +2,7 @@ package handler
 
 import (
 	"Douyin/ProxyServer/client"
-	"Douyin/proto/userproto"
+	"Douyin/proto"
 	"context"
 	"net/http"
 	"strconv"
@@ -20,8 +20,8 @@ func Register(ctx *gin.Context) {
 		})
 		return
 	}
-	var rsp *userproto.DouyinUserRegisterResponse
-	rsp, _ = client.UserSrvClient.Register(context.Background(), &userproto.DouyinUserRegisterRequest{
+	var rsp *proto.DouyinUserRegisterResponse
+	rsp, _ = client.SrvClient.Register(context.Background(), &proto.DouyinUserRegisterRequest{
 		Username: username,
 		Password: password,
 	})
@@ -52,8 +52,8 @@ func Login(ctx *gin.Context) {
 		})
 		return
 	}
-	var rsp *userproto.DouyinUserRegisterResponse
-	rsp, _ = client.UserSrvClient.Login(context.Background(), &userproto.DouyinUserRegisterRequest{
+	var rsp *proto.DouyinUserRegisterResponse
+	rsp, _ = client.SrvClient.Login(context.Background(), &proto.DouyinUserRegisterRequest{
 		Username: username,
 		Password: password,
 	})
@@ -84,7 +84,7 @@ func GetUserInfo(ctx *gin.Context) {
 		})
 		return
 	}
-	rsp, err := client.UserSrvClient.GetUserById(context.Background(), &userproto.IdRequest{
+	rsp, err := client.SrvClient.GetUserById(context.Background(), &proto.IdRequest{
 		Id:        int64(id),
 		Token:     token,
 		NeedToken: true,
