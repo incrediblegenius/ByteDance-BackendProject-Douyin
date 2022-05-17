@@ -1,5 +1,5 @@
 syntax = "proto3";
-option go_package = ".;userproto";
+option go_package = ".;userProto";
 
 message douyin_user_register_request{
   string username = 1 ; //注册用户名，最长32

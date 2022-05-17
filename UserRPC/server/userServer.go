@@ -1,9 +1,9 @@
 package server
 
 import (
+	_ "UserServer/global"
+	"UserServer/handler"
 	"UserServer/proto"
-	_ "UserServer/user_srv/global"
-	"UserServer/user_srv/handler"
 	"net"
 
 	"google.golang.org/grpc"

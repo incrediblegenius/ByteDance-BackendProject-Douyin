@@ -1,9 +1,9 @@
 package handler
 
 import (
+	"UserServer/global"
 	"UserServer/model"
 	"UserServer/proto"
-	"UserServer/user_srv/global"
 	"context"
 	"sort"
 	"time"

@@ -1,5 +1,5 @@
 syntax = "proto3";
-option go_package = ".;videoproto";
+option go_package = ".;proto";
 
 
 message douyin_favorite_action_request{

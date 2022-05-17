@@ -1,7 +1,7 @@
 package global
 
 import (
-	"UserServer/user_srv/middleware"
+	"UserServer/middleware"
 	"log"
 	"os"
 	"time"

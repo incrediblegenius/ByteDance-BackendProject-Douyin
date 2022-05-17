@@ -2,9 +2,9 @@ package handler
 
 import (
 	"UserServer/cfg"
+	"UserServer/global"
 	"UserServer/model"
 	"UserServer/proto"
-	"UserServer/user_srv/global"
 	"context"
 	"fmt"
 )

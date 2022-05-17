@@ -1,10 +1,10 @@
 package handler
 
 import (
+	"UserServer/global"
+	"UserServer/middleware"
 	"UserServer/model"
 	"UserServer/proto"
-	"UserServer/user_srv/global"
-	"UserServer/user_srv/middleware"
 	"context"
 	"errors"
 )

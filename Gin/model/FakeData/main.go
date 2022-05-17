@@ -3,10 +3,10 @@ package main
 import (
 	"Douyin/cfg"
 	"Douyin/model"
-	"Douyin/user_srv/global"
 	"bufio"
 	"fmt"
 	"io"
+	"log"
 	"math/rand"
 	"net/http"
 	"os"
@@ -14,9 +14,29 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
+	"gorm.io/gorm/schema"
 )
 
 func main() {
+	addr := "root:root@tcp(localhost:3306)/douyin_user?charset=utf8mb4&parseTime=True&loc=Local"
+	newLogger := logger.New(
+		log.New(os.Stdout, "\r\n", log.LstdFlags),
+		logger.Config{
+			SlowThreshold: time.Second,
+			LogLevel:      logger.Info,
+			Colorful:      true,
+		},
+	)
+	DB, _ := gorm.Open(mysql.Open(addr), &gorm.Config{
+		NamingStrategy: schema.NamingStrategy{
+			SingularTable: true,
+		},
+		Logger: newLogger,
+	})
 	f, _ := os.Open("./data.txt")
 	defer f.Close()
 	input := bufio.NewScanner(f)
@@ -56,7 +76,7 @@ func main() {
 				SaveVideoAndCover(cnt)
 				// mutex.Unlock()
 				defer resp.Body.Close()
-				result := global.DB.Create(&model.Video{
+				result := DB.Create(&model.Video{
 					AuthorID: ID,
 					PlayUrl:  url,
 					CoverUrl: fmt.Sprintf("http://%s:%d/covers/%s.png", cfg.ServerIP, cfg.ServerPort, filename),
