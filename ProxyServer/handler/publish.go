@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"Douyin/ProxyServer/userClient"
+	"Douyin/ProxyServer/client"
 	"Douyin/cfg"
 	"Douyin/proto"
 	"context"
@@ -34,7 +34,7 @@ func Publish(ctx *gin.Context) {
 		c <- err
 	}(data)
 
-	rsp, err := userClient.UserSrvClient.PublishAction(context.Background(), &proto.DouyinPublishActionRequest{
+	rsp, err := client.UserSrvClient.PublishAction(context.Background(), &proto.DouyinPublishActionRequest{
 		Token:     token,
 		VideoName: filename,
 	})
@@ -59,7 +59,7 @@ func Publish(ctx *gin.Context) {
 
 func PublishList(ctx *gin.Context) {
 	token := ctx.Query("token")
-	rsp, _ := userClient.UserSrvClient.PublishList(context.Background(), &proto.DouyinPublishListRequest{
+	rsp, _ := client.UserSrvClient.PublishList(context.Background(), &proto.DouyinPublishListRequest{
 		Token: token,
 	})
 	// fmt.Println(rsp)

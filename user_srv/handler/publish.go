@@ -7,13 +7,12 @@ import (
 	"Douyin/user_srv/global"
 	"context"
 	"fmt"
-	"os"
 )
 
 func (s *UserRegisterServer) PublishAction(ctx context.Context, req *proto.DouyinPublishActionRequest) (*proto.DouyinPublishActionResponse, error) {
 	claim, err := global.Jwt.ParseToken(req.Token)
 	if err != nil {
-		os.Remove("../videos/" + req.VideoName)
+		// os.Remove("../videos/" + req.VideoName)
 		return &proto.DouyinPublishActionResponse{
 			StatusCode: -2,
 			StatusMsg:  "token鉴权失败",
@@ -66,17 +65,23 @@ func (s *UserRegisterServer) PublishList(ctx context.Context, req *proto.DouyinP
 		Id:        int64(id),
 		NeedToken: false,
 	})
+	flag := false
 	for i, v := range videos {
-
+		result := global.DB.First(&model.FavoriteVideo{}, "video_id = ? and user_id = ?", v.ID, id)
+		if result.RowsAffected != 0 {
+			flag = true
+		}
 		vs[i] = &proto.Video{
-			Id:         int64(v.ID),
-			PlayUrl:    v.PlayUrl,
-			CoverUrl:   v.CoverUrl,
-			IsFavorite: false, // TODO 是否喜欢自己的视频...
-			Author:     user,
+			Id:            int64(v.ID),
+			PlayUrl:       v.PlayUrl,
+			CoverUrl:      v.CoverUrl,
+			IsFavorite:    flag,
+			Author:        user,
+			FavoriteCount: int64(v.FavoriteCount),
+			CommentCount:  int64(v.CommentCount),
 		}
 	}
-	fmt.Println(vs)
+	// fmt.Println(vs)
 	return &proto.DouyinPublishListResponse{
 		StatusCode: 0,
 		StatusMsg:  "获取视频列表成功",

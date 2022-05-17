@@ -28,6 +28,11 @@ func main() {
 			glog.Fatal(e)
 		}
 	}()
+	go func() {
+		if err := grpcserver.VideoServerRun(); err != nil {
+			glog.Fatal(err)
+		}
+	}()
 	if err := grpcserver.Run(); err != nil {
 		glog.Fatal(err)
 	}

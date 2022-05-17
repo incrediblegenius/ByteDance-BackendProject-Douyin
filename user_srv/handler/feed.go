@@ -10,15 +10,19 @@ import (
 )
 
 func (s *UserRegisterServer) GetUserFeed(ctx context.Context, req *proto.DouyinFeedRequest) (*proto.DouyinFeedResponse, error) {
+	uid := 0
 	if req.Token != "" {
-		_, err := global.Jwt.ParseToken(req.Token)
+		claim, err := global.Jwt.ParseToken(req.Token)
 		if err != nil {
 			return &proto.DouyinFeedResponse{
 				StatusCode: -2,
 				StatusMsg:  "token鉴权失败",
 				VideoList:  []*proto.Video{&proto.Video{}}}, nil
+		} else {
+			uid = int(claim.Id)
 		}
 	}
+
 	var videos []model.Video
 	result := global.DB.Limit(30).Order("update_time desc").Find(&videos, "update_time < ?", time.UnixMilli(req.LatestTime))
 	if result.Error != nil {
@@ -40,8 +44,16 @@ func (s *UserRegisterServer) GetUserFeed(ctx context.Context, req *proto.DouyinF
 	for _, v := range videos {
 		user, err := s.GetUserById(context.Background(), &proto.IdRequest{Id: int64(v.AuthorID), NeedToken: false})
 		if err != nil {
-			// fmt.Println(err.Error())
 			return nil, err
+		}
+		flag := false
+		if uid != 0 {
+			result := global.DB.First(&model.FavoriteVideo{}, "user_id = ? and video_id = ?", uid, v.ID)
+			if result.RowsAffected != 0 {
+				flag = true
+			} else {
+				flag = false
+			}
 		}
 		vis = append(vis, &proto.Video{
 			Id:            int64(v.ID),
@@ -50,7 +62,7 @@ func (s *UserRegisterServer) GetUserFeed(ctx context.Context, req *proto.DouyinF
 			CoverUrl:      v.CoverUrl,
 			FavoriteCount: int64(v.FavoriteCount),
 			CommentCount:  int64(v.CommentCount),
-			IsFavorite:    false, // TODO 判断这个视频是否自己喜欢
+			IsFavorite:    flag, // TODO 判断这个视频是否自己喜欢
 		})
 	}
 	var nextTime int64

@@ -1,8 +1,9 @@
 package main
 
 import (
+	_ "Douyin/ProxyServer/client"
 	"Douyin/ProxyServer/router"
-	_ "Douyin/ProxyServer/userClient"
+
 	"github.com/gin-gonic/gin"
 )
 

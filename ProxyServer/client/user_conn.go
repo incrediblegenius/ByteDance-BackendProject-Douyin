@@ -1,4 +1,4 @@
-package userClient
+package client
 
 import (
 	"Douyin/proto"

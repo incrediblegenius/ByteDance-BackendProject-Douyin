@@ -15,8 +15,8 @@ type Video struct {
 
 type FavoriteVideo struct {
 	BaseModel
-	Video   Video `gorm:"foreignkey:VideoID"`
-	VideoID int   `gorm:"index:idx_videoid;not null"`
 	User    User  `gorm:"foreignkey:UserID"`
-	UserID  int   `gorm:"index:idx_userid;not null"`
+	UserID  int   `gorm:"index:idx_userid_videoid,unique;not null"`
+	Video   Video `gorm:"foreignkey:VideoID"`
+	VideoID int   `gorm:"index:idx_userid_videoid,unique;index:idx_videoid;not null"`
 }
