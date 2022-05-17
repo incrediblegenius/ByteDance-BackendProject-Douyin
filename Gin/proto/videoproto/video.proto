@@ -1,0 +1,53 @@
+syntax = "proto3";
+option go_package = ".;videoproto";
+
+
+message douyin_favorite_action_request{
+    int64 user_id = 1 ;
+    string token = 2 ;
+    int64 video_id = 3 ;
+    int32 action = 4 ;  //1:favorite,2:unfavorite
+}
+
+message douyin_favorite_action_response{
+    int32 status_code = 1 ;
+    string status_msg = 2 ;
+}
+message user {
+    int64 id = 1 ;
+    string name = 2 ;
+    int64 follow_count = 3;
+    int64 follower_count = 4;
+    bool is_follow = 5;
+}
+ 
+message Video{
+    int64 id = 1 ; // 视频唯一标识
+    user author = 2 ; // 视频作者信息
+    string play_url = 3 ; // 视频播放地址
+    string cover_url = 4 ; // 视频封面地址
+    int64  favorite_count = 5 ; // 视频点赞数
+    int64 comment_count = 6 ; // 视频评论数
+    bool is_favorite = 7 ; // 是否已点赞
+}
+
+message douyin_favorite_list_request{
+    int64 user_id = 1 ;
+    string token = 2 ;
+}
+
+message douyin_favorite_list_response{
+    int32 status_code = 1 ;
+    string status_msg = 2 ;
+    repeated Video video_list = 3 ;
+}
+message OthersRequest {
+    int64 id = 1 ;
+    int64 check_from = 2 ;
+}
+
+service Videos {
+    rpc FavoriteAction(douyin_favorite_action_request) returns (douyin_favorite_action_response);
+    rpc FavoriteList(douyin_favorite_list_request) returns (douyin_favorite_list_response);
+    rpc GetUserById(OthersRequest) returns (user);
+}

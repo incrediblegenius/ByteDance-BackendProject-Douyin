@@ -1,0 +1,80 @@
+syntax = "proto3";
+option go_package = ".;userproto";
+
+message douyin_user_register_request{
+  string username = 1 ; //注册用户名，最长32
+  string password = 2 ; //密码，最长32
+}
+
+message douyin_user_register_response{
+  int32 status_code = 1 ; //状态码,0-success, others-fail
+  string status_msg = 2 ; //状态消息
+  int64 user_id = 3 ; //用户id
+  string token = 4 ; //用户鉴权token
+}
+
+message user {
+  int64 id = 1 ;
+  string name = 2 ;
+  int64 follow_count = 3;
+  int64 follower_count = 4;
+  bool is_follow = 5;
+}
+
+message IdRequest {
+  int64 id = 1 ;
+  string token = 2 ;
+  bool need_token =3;
+}
+
+message douyin_feed_request {
+  int64 latest_time = 1 ;
+  string token = 2 ;
+}
+
+message douyin_feed_response {
+  int32 status_code = 1 ; //状态码,0-success, others-fail
+  string status_msg = 2 ; //状态消息
+  repeated Video video_list = 3 ;
+  int64  next_time = 4 ; // 本次的返回视频中时间戳最早的，作为下次请求的latest_time
+}
+
+message Video{
+  int64 id = 1 ; // 视频唯一标识
+  user author = 2 ; // 视频作者信息
+  string play_url = 3 ; // 视频播放地址
+  string cover_url = 4 ; // 视频封面地址
+  int64  favorite_count = 5 ; // 视频点赞数
+  int64 comment_count = 6 ; // 视频评论数
+  bool is_favorite = 7 ; // 是否已点赞
+}
+
+message douyin_publish_action_request{
+  string token = 2 ; //用户鉴权token
+  string video_name = 3 ; //发布的视频的名字
+}
+
+message douyin_publish_action_response{
+  int32 status_code = 1 ; //状态码,0-success, others-fail
+  string status_msg = 2 ; //状态消息
+}
+
+message douyin_publish_list_request{
+  string token = 1 ; //用户鉴权token
+}
+
+message douyin_publish_list_response{
+  int32 status_code = 1 ; //状态码,0-success, others-fail
+  string status_msg = 2 ; //状态消息
+  repeated Video video_list = 3 ; // 用户的视频列表
+}
+
+service UserRegister{
+  rpc Register(douyin_user_register_request) returns (douyin_user_register_response);
+  rpc Login(douyin_user_register_request) returns (douyin_user_register_response);
+  rpc GetUserById(IdRequest) returns (user);
+  rpc GetUserFeed(douyin_feed_request) returns (douyin_feed_response);
+  rpc PublishAction(douyin_publish_action_request) returns (douyin_publish_action_response);
+  rpc PublishList(douyin_publish_list_request) returns (douyin_publish_list_response);
+}
+
