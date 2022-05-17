@@ -49,8 +49,12 @@ func (s *Server) PublishList(ctx context.Context, req *proto.DouyinPublishListRe
 			VideoList:  []*proto.Video{&proto.Video{}},
 		}, nil
 	}
-
-	id := int(claim.Id)
+	var id int
+	if req.UserId == 0 {
+		id = int(claim.Id)
+	} else {
+		id = int(req.UserId)
+	}
 	var videos []model.Video
 	result := global.DB.Where("author_id = ?", id).Find(&videos)
 	if result.Error != nil || len(videos) == 0 {

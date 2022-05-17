@@ -65,17 +65,45 @@ func (s *Server) FavoriteAction(ctx context.Context, req *proto.DouyinFavoriteAc
 	}, nil
 }
 
-// func (s *Server) FavoriteList(ctx context.Context, req *proto.DouyinFavoriteListRequest) (*proto.DouyinFavoriteListResponse, error) {
-// 	claim, err := global.Jwt.ParseToken(req.Token)
-// 	if err != nil {
-// 		return &proto.DouyinFavoriteListResponse{
-// 			StatusCode: -2,
-// 			StatusMsg:  "token鉴权失败",
-// 		}, nil
-// 	}
-// 	uid := req.UserId
-// 	if uid == 0 {
-// 		uid = claim.Id
-// 	}
-
-// }
+func (s *Server) FavoriteList(ctx context.Context, req *proto.DouyinFavoriteListRequest) (*proto.DouyinFavoriteListResponse, error) {
+	claim, err := global.Jwt.ParseToken(req.Token)
+	if err != nil {
+		return &proto.DouyinFavoriteListResponse{
+			StatusCode: -2,
+			StatusMsg:  "token鉴权失败",
+		}, nil
+	}
+	uid := req.UserId
+	if uid == 0 {
+		uid = claim.Id
+	}
+	var videoList []*model.Video
+	global.DB.Where("author_id = ?", uid).Find(&videoList)
+	vis := make([]*proto.Video, len(videoList))
+	for i, v := range videoList {
+		author, _ := s.GetUserById(context.Background(), &proto.IdRequest{
+			Id:        int64(v.AuthorID),
+			NeedToken: false,
+			SearchId:  uid,
+		})
+		flag := false
+		result := global.DB.First(&model.FavoriteVideo{}, "user_id = ? and video_id = ?", uid, v.ID)
+		if result.RowsAffected != 0 {
+			flag = true
+		}
+		vis[i] = &proto.Video{
+			Id:            int64(v.ID),
+			Author:        author,
+			PlayUrl:       v.PlayUrl,
+			CoverUrl:      v.CoverUrl,
+			FavoriteCount: int64(v.FavoriteCount),
+			CommentCount:  int64(v.CommentCount),
+			IsFavorite:    flag,
+		}
+	}
+	return &proto.DouyinFavoriteListResponse{
+		StatusCode: 0,
+		StatusMsg:  "操作成功",
+		VideoList:  vis,
+	}, nil
+}

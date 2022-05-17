@@ -25,6 +25,7 @@ message IdRequest {
   int64 id = 1 ;
   string token = 2 ;
   bool need_token =3;
+  int64 search_id = 4;
 }
 
 message douyin_feed_request {
@@ -61,6 +62,7 @@ message douyin_publish_action_response{
 
 message douyin_publish_list_request{
   string token = 1 ; //用户鉴权token
+  int64 user_id =2; //用户id
 }
 
 message douyin_publish_list_response{

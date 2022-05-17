@@ -3,6 +3,7 @@ package handler
 import (
 	"Douyin/ProxyServer/client"
 	"Douyin/cfg"
+	"strconv"
 
 	"Douyin/proto"
 	"context"
@@ -60,8 +61,11 @@ func Publish(ctx *gin.Context) {
 
 func PublishList(ctx *gin.Context) {
 	token := ctx.Query("token")
+	user_id := ctx.Query("user_id")
+	uid, _ := strconv.Atoi(user_id)
 	rsp, _ := client.SrvClient.PublishList(context.Background(), &proto.DouyinPublishListRequest{
-		Token: token,
+		Token:  token,
+		UserId: int64(uid),
 	})
 	// fmt.Println(rsp)
 	ctx.JSON(http.StatusOK, rsp)

@@ -40,3 +40,28 @@ func FavoriteAction(ctx *gin.Context) {
 	}
 	ctx.JSON(http.StatusOK, rsp)
 }
+
+func FavoriteList(ctx *gin.Context) {
+	token := ctx.Query("token")
+	user_id := ctx.Query("user_id")
+	uid, _ := strconv.Atoi(user_id)
+
+	rsp, err := client.SrvClient.FavoriteList(context.Background(), &proto.DouyinFavoriteListRequest{
+		Token:  token,
+		UserId: int64(uid),
+	})
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{
+			"status_code": -1,
+			"status_msg":  err.Error(),
+		})
+		return
+	} else if rsp.StatusCode != 0 {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"status_code": rsp.StatusCode,
+			"status_msg":  rsp.StatusMsg,
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, rsp)
+}

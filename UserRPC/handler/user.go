@@ -88,6 +88,16 @@ func (s *Server) GetUserById(ctx context.Context, req *proto.IdRequest) (*proto.
 	ans.FollowCount = int64(len(r))
 	global.DB.Where(&model.Relation{FollowTo: int(req.Id)}).Find(&r)
 	ans.FollowerCount = int64(len(r))
-	ans.IsFollow = false
+	if req.SearchId == 0 {
+		ans.IsFollow = false
+	} else {
+		result := global.DB.Where(&model.Relation{FollowFrom: int(req.SearchId), FollowTo: int(req.Id)}).First(&r)
+		if result.RowsAffected != 0 {
+			ans.IsFollow = true
+		} else {
+			ans.IsFollow = false
+		}
+	}
+
 	return ans, nil
 }

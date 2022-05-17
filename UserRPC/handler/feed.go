@@ -41,6 +41,15 @@ func (s *Server) GetUserFeed(ctx context.Context, req *proto.DouyinFeedRequest) 
 		}, nil
 	}
 	var vis []*proto.Video
+	var nextTime int64
+	if len(videos) > 0 {
+		sort.Slice(videos, func(i, j int) bool {
+			return videos[i].UpdatedAt.UnixMilli() > videos[j].UpdatedAt.UnixMilli()
+		})
+		nextTime = videos[len(videos)-1].UpdatedAt.UnixMilli()
+	} else {
+		nextTime = time.Now().UnixMilli()
+	}
 	for _, v := range videos {
 		user, err := s.GetUserById(context.Background(), &proto.IdRequest{Id: int64(v.AuthorID), NeedToken: false})
 		if err != nil {
@@ -65,15 +74,7 @@ func (s *Server) GetUserFeed(ctx context.Context, req *proto.DouyinFeedRequest) 
 			IsFavorite:    flag, // TODO 判断这个视频是否自己喜欢
 		})
 	}
-	var nextTime int64
-	if len(videos) > 0 {
-		sort.Slice(videos, func(i, j int) bool {
-			return videos[i].UpdatedAt.UnixMilli() > videos[j].UpdatedAt.UnixMilli()
-		})
-		nextTime = videos[0].UpdatedAt.UnixMilli()
-	} else {
-		nextTime = time.Now().UnixMilli()
-	}
+
 	return &proto.DouyinFeedResponse{
 		StatusCode: 0,
 		StatusMsg:  "success",
