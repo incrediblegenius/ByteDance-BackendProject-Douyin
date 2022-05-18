@@ -28,4 +28,9 @@ func InitRouter(Router *gin.Engine) {
 		r.POST("/action/", handler.FavoriteAction)
 		r.GET("/list/", handler.FavoriteList)
 	}
+	r = Router.Group("/douyin/comment")
+	{
+		r.POST("/action/", handler.CommentAction)
+		r.GET("/list/", handler.CommentList)
+	}
 }

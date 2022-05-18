@@ -116,7 +116,7 @@ func (s *Server) GetVideoById(ctx context.Context, in *proto.VideoIdRequest) (*p
 	}
 	var likeAuthor model.Relation
 	var likeVideo model.FavoriteVideo
-	r1 := global.DB.First(&likeAuthor, "follow_from = ? and follw_to = ?", in.SearchId, video.AuthorID)
+	r1 := global.DB.First(&likeAuthor, "follow_from = ? and follow_to = ?", in.SearchId, video.AuthorID)
 	r2 := global.DB.First(&likeVideo, "user_id = ? and video_id = ?", in.SearchId, video.ID)
 	return &proto.Video{
 		Id: int64(video.ID),

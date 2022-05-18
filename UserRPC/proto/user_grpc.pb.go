@@ -31,6 +31,8 @@ type ServerClient interface {
 	FavoriteAction(ctx context.Context, in *DouyinFavoriteActionRequest, opts ...grpc.CallOption) (*DouyinFavoriteActionResponse, error)
 	FavoriteList(ctx context.Context, in *DouyinFavoriteListRequest, opts ...grpc.CallOption) (*DouyinFavoriteListResponse, error)
 	GetVideoById(ctx context.Context, in *VideoIdRequest, opts ...grpc.CallOption) (*Video, error)
+	CommentAction(ctx context.Context, in *DouyinCommentActionRequest, opts ...grpc.CallOption) (*DouyinCommentActionResponse, error)
+	CommentList(ctx context.Context, in *DouyinCommentListRequest, opts ...grpc.CallOption) (*DouyinCommentListResponse, error)
 }
 
 type serverClient struct {
@@ -122,6 +124,24 @@ func (c *serverClient) GetVideoById(ctx context.Context, in *VideoIdRequest, opt
 	return out, nil
 }
 
+func (c *serverClient) CommentAction(ctx context.Context, in *DouyinCommentActionRequest, opts ...grpc.CallOption) (*DouyinCommentActionResponse, error) {
+	out := new(DouyinCommentActionResponse)
+	err := c.cc.Invoke(ctx, "/Server/CommentAction", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serverClient) CommentList(ctx context.Context, in *DouyinCommentListRequest, opts ...grpc.CallOption) (*DouyinCommentListResponse, error) {
+	out := new(DouyinCommentListResponse)
+	err := c.cc.Invoke(ctx, "/Server/CommentList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ServerServer is the server API for Server service.
 // All implementations must embed UnimplementedServerServer
 // for forward compatibility
@@ -135,6 +155,8 @@ type ServerServer interface {
 	FavoriteAction(context.Context, *DouyinFavoriteActionRequest) (*DouyinFavoriteActionResponse, error)
 	FavoriteList(context.Context, *DouyinFavoriteListRequest) (*DouyinFavoriteListResponse, error)
 	GetVideoById(context.Context, *VideoIdRequest) (*Video, error)
+	CommentAction(context.Context, *DouyinCommentActionRequest) (*DouyinCommentActionResponse, error)
+	CommentList(context.Context, *DouyinCommentListRequest) (*DouyinCommentListResponse, error)
 	mustEmbedUnimplementedServerServer()
 }
 
@@ -168,6 +190,12 @@ func (UnimplementedServerServer) FavoriteList(context.Context, *DouyinFavoriteLi
 }
 func (UnimplementedServerServer) GetVideoById(context.Context, *VideoIdRequest) (*Video, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetVideoById not implemented")
+}
+func (UnimplementedServerServer) CommentAction(context.Context, *DouyinCommentActionRequest) (*DouyinCommentActionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CommentAction not implemented")
+}
+func (UnimplementedServerServer) CommentList(context.Context, *DouyinCommentListRequest) (*DouyinCommentListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CommentList not implemented")
 }
 func (UnimplementedServerServer) mustEmbedUnimplementedServerServer() {}
 
@@ -344,6 +372,42 @@ func _Server_GetVideoById_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Server_CommentAction_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DouyinCommentActionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServerServer).CommentAction(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Server/CommentAction",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServerServer).CommentAction(ctx, req.(*DouyinCommentActionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Server_CommentList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DouyinCommentListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServerServer).CommentList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Server/CommentList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServerServer).CommentList(ctx, req.(*DouyinCommentListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Server_ServiceDesc is the grpc.ServiceDesc for Server service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -386,6 +450,14 @@ var Server_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetVideoById",
 			Handler:    _Server_GetVideoById_Handler,
+		},
+		{
+			MethodName: "CommentAction",
+			Handler:    _Server_CommentAction_Handler,
+		},
+		{
+			MethodName: "CommentList",
+			Handler:    _Server_CommentList_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

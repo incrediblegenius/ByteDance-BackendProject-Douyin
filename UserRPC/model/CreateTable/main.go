@@ -1,7 +1,7 @@
 package main
 
 import (
-	"UserServer/model"
+	"Douyin/model"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -18,5 +18,5 @@ func main() {
 	if err != nil {
 		return
 	}
-	_ = db.AutoMigrate(&model.User{}, &model.Relation{}, &model.Video{}, &model.FavoriteVideo{})
+	_ = db.AutoMigrate(&model.User{}, &model.Video{}, &model.FavoriteVideo{}, &model.Relation{}, &model.Comment{})
 }
