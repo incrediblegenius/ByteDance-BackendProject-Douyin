@@ -30,6 +30,7 @@ type ServerClient interface {
 	PublishList(ctx context.Context, in *DouyinPublishListRequest, opts ...grpc.CallOption) (*DouyinPublishListResponse, error)
 	FavoriteAction(ctx context.Context, in *DouyinFavoriteActionRequest, opts ...grpc.CallOption) (*DouyinFavoriteActionResponse, error)
 	FavoriteList(ctx context.Context, in *DouyinFavoriteListRequest, opts ...grpc.CallOption) (*DouyinFavoriteListResponse, error)
+	GetVideoById(ctx context.Context, in *VideoIdRequest, opts ...grpc.CallOption) (*Video, error)
 }
 
 type serverClient struct {
@@ -112,6 +113,15 @@ func (c *serverClient) FavoriteList(ctx context.Context, in *DouyinFavoriteListR
 	return out, nil
 }
 
+func (c *serverClient) GetVideoById(ctx context.Context, in *VideoIdRequest, opts ...grpc.CallOption) (*Video, error) {
+	out := new(Video)
+	err := c.cc.Invoke(ctx, "/Server/GetVideoById", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ServerServer is the server API for Server service.
 // All implementations must embed UnimplementedServerServer
 // for forward compatibility
@@ -124,6 +134,7 @@ type ServerServer interface {
 	PublishList(context.Context, *DouyinPublishListRequest) (*DouyinPublishListResponse, error)
 	FavoriteAction(context.Context, *DouyinFavoriteActionRequest) (*DouyinFavoriteActionResponse, error)
 	FavoriteList(context.Context, *DouyinFavoriteListRequest) (*DouyinFavoriteListResponse, error)
+	GetVideoById(context.Context, *VideoIdRequest) (*Video, error)
 	mustEmbedUnimplementedServerServer()
 }
 
@@ -154,6 +165,9 @@ func (UnimplementedServerServer) FavoriteAction(context.Context, *DouyinFavorite
 }
 func (UnimplementedServerServer) FavoriteList(context.Context, *DouyinFavoriteListRequest) (*DouyinFavoriteListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FavoriteList not implemented")
+}
+func (UnimplementedServerServer) GetVideoById(context.Context, *VideoIdRequest) (*Video, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetVideoById not implemented")
 }
 func (UnimplementedServerServer) mustEmbedUnimplementedServerServer() {}
 
@@ -312,6 +326,24 @@ func _Server_FavoriteList_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Server_GetVideoById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(VideoIdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServerServer).GetVideoById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Server/GetVideoById",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServerServer).GetVideoById(ctx, req.(*VideoIdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Server_ServiceDesc is the grpc.ServiceDesc for Server service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -350,6 +382,10 @@ var Server_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "FavoriteList",
 			Handler:    _Server_FavoriteList_Handler,
+		},
+		{
+			MethodName: "GetVideoById",
+			Handler:    _Server_GetVideoById_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

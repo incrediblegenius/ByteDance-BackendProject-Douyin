@@ -94,6 +94,12 @@ message douyin_favorite_action_response{
   string status_msg = 2 ;
 }
 
+message video_id_request{
+  int64 video_id = 1 ;
+  int64 search_id = 2 ;
+}
+
+
 service Server{
   rpc Register(douyin_user_register_request) returns (douyin_user_register_response);
   rpc Login(douyin_user_register_request) returns (douyin_user_register_response);
@@ -103,5 +109,6 @@ service Server{
   rpc PublishList(douyin_publish_list_request) returns (douyin_publish_list_response);
   rpc FavoriteAction(douyin_favorite_action_request) returns (douyin_favorite_action_response);
   rpc FavoriteList(douyin_favorite_list_request) returns (douyin_favorite_list_response);
+  rpc GetVideoById(video_id_request) returns (Video);
 }
 

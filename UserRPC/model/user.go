@@ -1,8 +1,9 @@
 package model
 
 import (
-	"gorm.io/gorm"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type BaseModel struct {
@@ -14,8 +15,10 @@ type BaseModel struct {
 }
 type User struct {
 	BaseModel
-	UserName string `gorm:"index:idx_username,unique;type:varchar(40);not null"`
-	Password string `gorm:"type:varchar(40);not null"`
+	UserName       string `gorm:"index:idx_username,unique;type:varchar(40);not null"`
+	Password       string `gorm:"type:varchar(40);not null"`
+	FollowingCount int    `gorm:"default:0"`
+	FollowerCount  int    `gorm:"default:0"`
 }
 
 type Relation struct {

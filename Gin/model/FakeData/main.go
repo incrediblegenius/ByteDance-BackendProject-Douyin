@@ -21,6 +21,10 @@ import (
 	"gorm.io/gorm/schema"
 )
 
+const (
+	Dir = "/Users/evil/Desktop/Go/Douyin/Gin/model/FakeData"
+)
+
 func main() {
 	addr := "root:root@tcp(localhost:3306)/douyin_user?charset=utf8mb4&parseTime=True&loc=Local"
 	newLogger := logger.New(
@@ -51,7 +55,7 @@ func main() {
 			ch <- struct{}{}
 			wg.Add(1)
 			go func(url string, cnt int) {
-				ID := rand.Intn(1000) + 1
+				ID := rand.Intn(50) + 1
 
 				urlSlice := strings.Split(url, "/")
 				tmp := urlSlice[len(urlSlice)-1]
@@ -84,8 +88,8 @@ func main() {
 				if result.Error != nil {
 					fmt.Println("插入失败")
 				}
-				os.Rename(fmt.Sprintf("/Users/evil/Desktop/Go/Douyin/model/FakeData/test%d.png", cnt), cfg.StaticDir+"/covers/"+filename+".png")
-				os.Remove(fmt.Sprintf("/Users/evil/Desktop/Go/Douyin/model/FakeData/test%d.mp4", cnt))
+				os.Rename(fmt.Sprintf(Dir+"/test%d.png", cnt), cfg.StaticDir+"/covers/"+filename+".png")
+				os.Remove(fmt.Sprintf(Dir+"/test%d.mp4", cnt))
 				<-ch
 				wg.Done()
 			}(url, cnt)
@@ -101,7 +105,7 @@ func main() {
 func SaveVideoAndCover(cnt int) error {
 	cmd := []string{
 		"$(docker run --rm -i -v",
-		"/Users/evil/Desktop/Go/Douyin/model/FakeData:/tmp",
+		Dir + ":/tmp",
 		"linuxserver/ffmpeg",
 		fmt.Sprintf("-i /tmp/test%d.mp4", cnt),
 		"-ss 00:00:05",

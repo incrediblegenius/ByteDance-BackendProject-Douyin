@@ -18,5 +18,5 @@ func main() {
 	if err != nil {
 		return
 	}
-	_ = db.AutoMigrate(&model.User{}, &model.Relation{}, &model.Video{}, &model.FavoriteVideo{})
+	_ = db.AutoMigrate(&model.User{}, &model.Video{})
 }

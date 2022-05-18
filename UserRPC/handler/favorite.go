@@ -71,39 +71,67 @@ func (s *Server) FavoriteList(ctx context.Context, req *proto.DouyinFavoriteList
 		return &proto.DouyinFavoriteListResponse{
 			StatusCode: -2,
 			StatusMsg:  "token鉴权失败",
+			VideoList:  []*proto.Video{&proto.Video{}},
+			// 返回nil前端报错
 		}, nil
 	}
 	uid := req.UserId
 	if uid == 0 {
 		uid = claim.Id
 	}
-	var videoList []*model.Video
-	global.DB.Where("author_id = ?", uid).Find(&videoList)
+	var videoList []*model.FavoriteVideo
+	global.DB.Where("user_id = ?", uid).Find(&videoList)
+	if len(videoList) == 0 {
+		return &proto.DouyinFavoriteListResponse{
+			StatusCode: 0,
+			StatusMsg:  "没有收藏视频",
+			VideoList:  []*proto.Video{&proto.Video{}},
+			// 返回nil前端报错
+		}, nil
+	}
 	vis := make([]*proto.Video, len(videoList))
-	for i, v := range videoList {
-		author, _ := s.GetUserById(context.Background(), &proto.IdRequest{
-			Id:        int64(v.AuthorID),
-			NeedToken: false,
-			SearchId:  uid,
+	for i := range videoList {
+		vis[i], _ = s.GetVideoById(context.Background(), &proto.VideoIdRequest{
+			VideoId:  int64(videoList[i].VideoID),
+			SearchId: int64(uid),
 		})
-		flag := false
-		result := global.DB.First(&model.FavoriteVideo{}, "user_id = ? and video_id = ?", uid, v.ID)
-		if result.RowsAffected != 0 {
-			flag = true
-		}
-		vis[i] = &proto.Video{
-			Id:            int64(v.ID),
-			Author:        author,
-			PlayUrl:       v.PlayUrl,
-			CoverUrl:      v.CoverUrl,
-			FavoriteCount: int64(v.FavoriteCount),
-			CommentCount:  int64(v.CommentCount),
-			IsFavorite:    flag,
-		}
 	}
 	return &proto.DouyinFavoriteListResponse{
 		StatusCode: 0,
 		StatusMsg:  "操作成功",
 		VideoList:  vis,
 	}, nil
+}
+
+func (s *Server) GetVideoById(ctx context.Context, in *proto.VideoIdRequest) (*proto.Video, error) {
+	video := model.Video{}
+	result := global.DB.First(&video, "id = ?", in.VideoId)
+	if result.Error != nil {
+		return &proto.Video{}, result.Error
+	}
+	var author model.User
+	result = global.DB.First(&author, "id = ?", video.AuthorID)
+	if result.Error != nil {
+		return &proto.Video{}, result.Error
+	}
+	var likeAuthor model.Relation
+	var likeVideo model.FavoriteVideo
+	r1 := global.DB.First(&likeAuthor, "follow_from = ? and follw_to = ?", in.SearchId, video.AuthorID)
+	r2 := global.DB.First(&likeVideo, "user_id = ? and video_id = ?", in.SearchId, video.ID)
+	return &proto.Video{
+		Id: int64(video.ID),
+		Author: &proto.User{
+			Id:            int64(author.ID),
+			Name:          author.UserName,
+			FollowCount:   int64(author.FollowingCount),
+			FollowerCount: int64(author.FollowerCount),
+			IsFollow:      r1.RowsAffected != 0,
+		},
+		PlayUrl:       video.PlayUrl,
+		CoverUrl:      video.CoverUrl,
+		FavoriteCount: int64(video.FavoriteCount),
+		CommentCount:  int64(video.CommentCount),
+		IsFavorite:    r2.RowsAffected != 0,
+	}, nil
+
 }

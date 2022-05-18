@@ -47,6 +47,7 @@ func (s *Server) PublishList(ctx context.Context, req *proto.DouyinPublishListRe
 			StatusCode: -2,
 			StatusMsg:  "token鉴权失败",
 			VideoList:  []*proto.Video{&proto.Video{}},
+			// 返回nil前端报错
 		}, nil
 	}
 	var id int
@@ -62,6 +63,7 @@ func (s *Server) PublishList(ctx context.Context, req *proto.DouyinPublishListRe
 			StatusCode: -1,
 			StatusMsg:  "获取视频列表失败",
 			VideoList:  []*proto.Video{&proto.Video{}},
+			// 返回nil前端报错
 		}, nil
 	}
 	vs := make([]*proto.Video, len(videos))
