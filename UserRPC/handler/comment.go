@@ -93,7 +93,7 @@ func (s *Server) CommentList(ctx context.Context, req *proto.DouyinCommentListRe
 		uid = claim.Id
 	}
 	var comments []*model.Comment
-	global.DB.Where("user_id = ? and video_id = ?", uid, req.VideoId).Find(&comments)
+	global.DB.Where("video_id = ?", req.VideoId).Find(&comments)
 	commentsList := make([]*proto.Comment, len(comments))
 	for i := range comments {
 		user, _ := s.GetUserById(context.Background(), &proto.IdRequest{

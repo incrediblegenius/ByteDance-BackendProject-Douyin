@@ -33,4 +33,10 @@ func InitRouter(Router *gin.Engine) {
 		r.POST("/action/", handler.CommentAction)
 		r.GET("/list/", handler.CommentList)
 	}
+	r = Router.Group("/douyin/relation")
+	{
+		r.POST("/action/", handler.RelationAction)
+		r.GET("/follow/list/", handler.FollowList)
+		r.GET("/follower/list/", handler.FollowerList)
+	}
 }

@@ -150,10 +150,46 @@ func CreateLikes(nums int) {
 			})
 		}
 	}
+}
 
+func CreateRealations(nums int) {
+	for i := 0; i < nums; i++ {
+		uid := rand.Intn(50) + 1
+		tuid := rand.Intn(50) + 1
+		DB.Transaction(func(tx *gorm.DB) error {
+			// 在事务中执行一些 db 操作（从这里开始，您应该使用 'tx' 而不是 'db'）
+			if err := tx.Create(&model.Relation{
+				FollowFrom: int(uid),
+				FollowTo:   int(tuid),
+			}).Error; err != nil {
+				// 返回任何错误都会回滚事务
+				return err
+			}
+			if err := tx.Model(&model.User{}).Where("id = ?", uid).Update("following_count", gorm.Expr("following_count + ?", 1)).Error; err != nil {
+				return err
+			}
+			if err := tx.Model(&model.User{}).Where("id = ?", tuid).Update("follower_count", gorm.Expr("follower_count + ?", 1)).Error; err != nil {
+				return err
+			}
+			// 返回 nil 提交事务
+			return nil
+		})
+	}
+}
+
+func CountComments() {
+	videos := []model.Video{}
+	DB.Find(&videos)
+	for _, v := range videos {
+		var cnt int64
+		DB.Model(&model.Comment{}).Where("video_id = ?", v.ID).Count(&cnt)
+		DB.Model(&v).Update("comment_count", cnt)
+	}
 }
 
 func main() {
 	// CreateVideos()
-	CreateLikes(1000)
+	// CreateLikes(1000)
+	// CreateRealations(1000)
+	CountComments()
 }

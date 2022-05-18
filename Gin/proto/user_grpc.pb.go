@@ -33,6 +33,9 @@ type ServerClient interface {
 	GetVideoById(ctx context.Context, in *VideoIdRequest, opts ...grpc.CallOption) (*Video, error)
 	CommentAction(ctx context.Context, in *DouyinCommentActionRequest, opts ...grpc.CallOption) (*DouyinCommentActionResponse, error)
 	CommentList(ctx context.Context, in *DouyinCommentListRequest, opts ...grpc.CallOption) (*DouyinCommentListResponse, error)
+	RelationAction(ctx context.Context, in *DouyinRelationActionRequest, opts ...grpc.CallOption) (*DouyinRelationActionResponse, error)
+	RelationFollowList(ctx context.Context, in *DouyinRelationFollowListRequest, opts ...grpc.CallOption) (*DouyinRelationFollowListResponse, error)
+	RelationFollowerList(ctx context.Context, in *DouyinRelationFollowerListRequest, opts ...grpc.CallOption) (*DouyinRelationFollowerListResponse, error)
 }
 
 type serverClient struct {
@@ -142,6 +145,33 @@ func (c *serverClient) CommentList(ctx context.Context, in *DouyinCommentListReq
 	return out, nil
 }
 
+func (c *serverClient) RelationAction(ctx context.Context, in *DouyinRelationActionRequest, opts ...grpc.CallOption) (*DouyinRelationActionResponse, error) {
+	out := new(DouyinRelationActionResponse)
+	err := c.cc.Invoke(ctx, "/Server/RelationAction", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serverClient) RelationFollowList(ctx context.Context, in *DouyinRelationFollowListRequest, opts ...grpc.CallOption) (*DouyinRelationFollowListResponse, error) {
+	out := new(DouyinRelationFollowListResponse)
+	err := c.cc.Invoke(ctx, "/Server/RelationFollowList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *serverClient) RelationFollowerList(ctx context.Context, in *DouyinRelationFollowerListRequest, opts ...grpc.CallOption) (*DouyinRelationFollowerListResponse, error) {
+	out := new(DouyinRelationFollowerListResponse)
+	err := c.cc.Invoke(ctx, "/Server/RelationFollowerList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ServerServer is the server API for Server service.
 // All implementations must embed UnimplementedServerServer
 // for forward compatibility
@@ -157,6 +187,9 @@ type ServerServer interface {
 	GetVideoById(context.Context, *VideoIdRequest) (*Video, error)
 	CommentAction(context.Context, *DouyinCommentActionRequest) (*DouyinCommentActionResponse, error)
 	CommentList(context.Context, *DouyinCommentListRequest) (*DouyinCommentListResponse, error)
+	RelationAction(context.Context, *DouyinRelationActionRequest) (*DouyinRelationActionResponse, error)
+	RelationFollowList(context.Context, *DouyinRelationFollowListRequest) (*DouyinRelationFollowListResponse, error)
+	RelationFollowerList(context.Context, *DouyinRelationFollowerListRequest) (*DouyinRelationFollowerListResponse, error)
 	mustEmbedUnimplementedServerServer()
 }
 
@@ -196,6 +229,15 @@ func (UnimplementedServerServer) CommentAction(context.Context, *DouyinCommentAc
 }
 func (UnimplementedServerServer) CommentList(context.Context, *DouyinCommentListRequest) (*DouyinCommentListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CommentList not implemented")
+}
+func (UnimplementedServerServer) RelationAction(context.Context, *DouyinRelationActionRequest) (*DouyinRelationActionResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RelationAction not implemented")
+}
+func (UnimplementedServerServer) RelationFollowList(context.Context, *DouyinRelationFollowListRequest) (*DouyinRelationFollowListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RelationFollowList not implemented")
+}
+func (UnimplementedServerServer) RelationFollowerList(context.Context, *DouyinRelationFollowerListRequest) (*DouyinRelationFollowerListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RelationFollowerList not implemented")
 }
 func (UnimplementedServerServer) mustEmbedUnimplementedServerServer() {}
 
@@ -408,6 +450,60 @@ func _Server_CommentList_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Server_RelationAction_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DouyinRelationActionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServerServer).RelationAction(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Server/RelationAction",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServerServer).RelationAction(ctx, req.(*DouyinRelationActionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Server_RelationFollowList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DouyinRelationFollowListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServerServer).RelationFollowList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Server/RelationFollowList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServerServer).RelationFollowList(ctx, req.(*DouyinRelationFollowListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Server_RelationFollowerList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DouyinRelationFollowerListRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ServerServer).RelationFollowerList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Server/RelationFollowerList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ServerServer).RelationFollowerList(ctx, req.(*DouyinRelationFollowerListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Server_ServiceDesc is the grpc.ServiceDesc for Server service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -458,6 +554,18 @@ var Server_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CommentList",
 			Handler:    _Server_CommentList_Handler,
+		},
+		{
+			MethodName: "RelationAction",
+			Handler:    _Server_RelationAction_Handler,
+		},
+		{
+			MethodName: "RelationFollowList",
+			Handler:    _Server_RelationFollowList_Handler,
+		},
+		{
+			MethodName: "RelationFollowerList",
+			Handler:    _Server_RelationFollowerList_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

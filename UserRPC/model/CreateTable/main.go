@@ -1,7 +1,7 @@
 package main
 
 import (
-	"Douyin/model"
+	"UserServer/model"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
