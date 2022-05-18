@@ -1,23 +1,72 @@
 package main
 
 import (
-	"UserServer/server"
+	"UserServer/global"
+	"UserServer/handler"
+	"UserServer/proto"
+	"UserServer/utils"
 	"flag"
+	"fmt"
+	"net"
+	"os"
+	"os/signal"
+	"syscall"
 
-	"github.com/golang/glog"
+	"github.com/nacos-group/nacos-sdk-go/vo"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/health"
+	"google.golang.org/grpc/health/grpc_health_v1"
 )
 
 func main() {
-	flag.Parse()
-	defer glog.Flush()
-	//go func() {
-	//	err := grpcserver.Run()
-	//	if err != nil {
-	//		glog.Fatal(err)
-	//	}
-	//}()
+	IP := flag.String("ip", "127.0.0.1", "ip address")
+	port := flag.Int("port", 0, "port")
+	if *port == 0 {
+		*port, _ = utils.GetFreePort()
+	}
 
-	if err := server.Run(); err != nil {
-		glog.Fatal(err)
+	server := grpc.NewServer()
+	proto.RegisterServerServer(server, &handler.Server{})
+	lis, err := net.Listen("tcp", fmt.Sprintf("%s:%d", *IP, *port))
+	if err != nil {
+		panic("failed to listen:" + err.Error())
+	}
+	grpc_health_v1.RegisterHealthServer(server, health.NewServer())
+
+	success, _ := global.NamingClient.RegisterInstance(vo.RegisterInstanceParam{
+		Ip:          *IP,
+		Port:        uint64(*port),
+		ServiceName: global.ServerConfig.Name,
+		Weight:      10,
+		Enable:      true,
+		Healthy:     true,
+		Ephemeral:   true,
+		ClusterName: "cluster-a",              // 默认值DEFAULT
+		GroupName:   global.NacosConfig.Group, // 默认值DEFAULT_GROUP
+	})
+	if success {
+		fmt.Println("微服务注册成功")
+	}
+
+	go func() {
+		err = server.Serve(lis)
+		if err != nil {
+			panic("failed to start grpc:" + err.Error())
+		}
+	}()
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+	// 注销服务
+	success, _ = global.NamingClient.DeregisterInstance(vo.DeregisterInstanceParam{
+		Ip:          *IP,
+		Port:        uint64(*port),
+		ServiceName: global.ServerConfig.Name,
+		Ephemeral:   true,
+		Cluster:     "cluster-a",              // 默认值DEFAULT
+		GroupName:   global.NacosConfig.Group, // 默认值DEFAULT_GROUP
+	})
+	if success {
+		fmt.Println("微服务注销成功")
 	}
 }

@@ -48,11 +48,13 @@ message Video{
   int64  favorite_count = 5 ; // 视频点赞数
   int64 comment_count = 6 ; // 视频评论数
   bool is_favorite = 7 ; // 是否已点赞
+  string title = 8 ; // 视频标题
 }
 
 message douyin_publish_action_request{
-  string token = 2 ; //用户鉴权token
-  string video_name = 3 ; //发布的视频的名字
+  string token = 1 ; //用户鉴权token
+  string video_name = 2 ; //发布的视频的名字
+  string title = 3 ; //发布的视频的标题
 }
 
 message douyin_publish_action_response{

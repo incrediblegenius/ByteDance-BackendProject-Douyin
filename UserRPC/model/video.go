@@ -11,6 +11,7 @@ type Video struct {
 	CoverUrl      string    `gorm:"type:varchar(255)"`
 	FavoriteCount int       `gorm:"default:0"`
 	CommentCount  int       `gorm:"default:0"`
+	Title         string    `gorm:"type:varchar(50);not null"`
 }
 
 type FavoriteVideo struct {

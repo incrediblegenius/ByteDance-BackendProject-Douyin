@@ -1,7 +1,7 @@
 package main
 
 import (
-	"UserServer/cfg"
+	"UserServer/global"
 	"UserServer/model"
 	"bufio"
 	"fmt"
@@ -91,12 +91,12 @@ func CreateVideos() {
 				result := DB.Create(&model.Video{
 					AuthorID: ID,
 					PlayUrl:  url,
-					CoverUrl: fmt.Sprintf("http://%s:%d/covers/%s.png", cfg.ServerIP, cfg.ServerPort, filename),
+					CoverUrl: fmt.Sprintf("http://%s:%d/covers/%s.png", global.ServerIP, global.ServerPort, filename),
 				})
 				if result.Error != nil {
 					fmt.Println("插入失败")
 				}
-				os.Rename(fmt.Sprintf(Dir+"/test%d.png", cnt), cfg.StaticDir+"/covers/"+filename+".png")
+				os.Rename(fmt.Sprintf(Dir+"/test%d.png", cnt), global.StaticDir+"/covers/"+filename+".png")
 				os.Remove(fmt.Sprintf(Dir+"/test%d.mp4", cnt))
 				<-ch
 				wg.Done()

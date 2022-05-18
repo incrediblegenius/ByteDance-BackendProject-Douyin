@@ -22,6 +22,7 @@ import (
 func Publish(ctx *gin.Context) {
 	token := ctx.PostForm("token")
 	data, err := ctx.FormFile("data")
+	title := ctx.Query("title")
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status_code": -1,
@@ -39,6 +40,7 @@ func Publish(ctx *gin.Context) {
 	rsp, err := client.SrvClient.PublishAction(context.Background(), &proto.DouyinPublishActionRequest{
 		Token:     token,
 		VideoName: filename,
+		Title:     title,
 	})
 
 	if e := <-c; e == nil && err == nil && rsp.StatusCode == 0 {

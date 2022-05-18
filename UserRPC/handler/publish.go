@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"UserServer/cfg"
 	"UserServer/global"
 	"UserServer/model"
 	"UserServer/proto"
@@ -24,8 +23,9 @@ func (s *Server) PublishAction(ctx context.Context, req *proto.DouyinPublishActi
 
 	video := &model.Video{
 		AuthorID: id,
-		PlayUrl:  fmt.Sprintf("http://%s:%d/videos/%s.mp4", cfg.ServerIP, cfg.ServerPort, filename),
-		CoverUrl: fmt.Sprintf("http://%s:%d/covers/%s.png", cfg.ServerIP, cfg.ServerPort, filename),
+		PlayUrl:  fmt.Sprintf("http://%s:%d/videos/%s.mp4", global.ServerIP, global.ServerPort, filename),
+		CoverUrl: fmt.Sprintf("http://%s:%d/covers/%s.png", global.ServerIP, global.ServerPort, filename),
+		Title:    req.Title,
 	}
 	result := global.DB.Create(&video)
 	if result.Error != nil {
@@ -85,6 +85,7 @@ func (s *Server) PublishList(ctx context.Context, req *proto.DouyinPublishListRe
 			Author:        user,
 			FavoriteCount: int64(v.FavoriteCount),
 			CommentCount:  int64(v.CommentCount),
+			Title:         v.Title,
 		}
 	}
 	// fmt.Println(vs)

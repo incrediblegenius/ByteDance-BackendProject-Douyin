@@ -132,6 +132,7 @@ func (s *Server) GetVideoById(ctx context.Context, in *proto.VideoIdRequest) (*p
 		FavoriteCount: int64(video.FavoriteCount),
 		CommentCount:  int64(video.CommentCount),
 		IsFavorite:    r2.RowsAffected != 0,
+		Title:         video.Title,
 	}, nil
 
 }
