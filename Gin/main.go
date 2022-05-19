@@ -1,8 +1,8 @@
 package main
 
 import (
-	"Douyin/ProxyServer/router"
 	"Douyin/global"
+	"Douyin/router"
 	"fmt"
 	"net/http"
 	"os"

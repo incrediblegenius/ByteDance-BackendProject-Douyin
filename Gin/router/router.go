@@ -1,7 +1,7 @@
 package router
 
 import (
-	"Douyin/ProxyServer/handler"
+	"Douyin/handler"
 
 	"github.com/gin-gonic/gin"
 )
