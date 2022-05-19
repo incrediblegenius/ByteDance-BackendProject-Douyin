@@ -1,5 +1,11 @@
 package cfg
 
+type StaticServerConfig struct {
+	Host      string `json:"host"`
+	Port      int    `json:"port"`
+	StaticDir string `json:"static_dir"`
+}
+
 type MysqlConfig struct {
 	Host     string `json:"host"`
 	Port     int    `json:"port"`
@@ -9,9 +15,10 @@ type MysqlConfig struct {
 }
 
 type ServerConfig struct {
-	Host      string      `json:"host"`
-	Name      string      `json:"name"`
-	MysqlInfo MysqlConfig `json:"mysql"`
+	Name       string             `json:"name"`
+	Tags       map[string]string  `json:"tag"`
+	MysqlInfo  MysqlConfig        `json:"mysql"`
+	StaticInfo StaticServerConfig `json:"static_server"`
 }
 
 type NacosConfig struct {

@@ -1,8 +1,7 @@
 package handler
 
 import (
-	"Douyin/ProxyServer/client"
-	"Douyin/cfg"
+	"Douyin/global"
 	"strconv"
 
 	"Douyin/proto"
@@ -37,19 +36,19 @@ func Publish(ctx *gin.Context) {
 		c <- err
 	}(data)
 
-	rsp, err := client.SrvClient.PublishAction(context.Background(), &proto.DouyinPublishActionRequest{
+	rsp, err := global.SrvConn().PublishAction(context.Background(), &proto.DouyinPublishActionRequest{
 		Token:     token,
 		VideoName: filename,
 		Title:     title,
 	})
 
 	if e := <-c; e == nil && err == nil && rsp.StatusCode == 0 {
-		os.Rename(cfg.StaticDir+"/tmp/test.mp4", cfg.StaticDir+"/videos/"+filename+".mp4")
-		os.Rename(cfg.StaticDir+"/tmp/test.png", cfg.StaticDir+"/covers/"+filename+".png")
+		os.Rename(global.ServerConfig.StaticInfo.StaticDir+"/tmp/test.mp4", global.ServerConfig.StaticInfo.StaticDir+"/videos/"+filename+".mp4")
+		os.Rename(global.ServerConfig.StaticInfo.StaticDir+"/tmp/test.png", global.ServerConfig.StaticInfo.StaticDir+"/covers/"+filename+".png")
 		ctx.JSON(http.StatusOK, rsp)
 	} else {
-		os.Remove(cfg.StaticDir + "/tmp/test.mp4")
-		os.Remove(cfg.StaticDir + "/tmp/test.png")
+		os.Remove(global.ServerConfig.StaticInfo.StaticDir + "/tmp/test.mp4")
+		os.Remove(global.ServerConfig.StaticInfo.StaticDir + "/tmp/test.png")
 		if e != nil {
 			ctx.JSON(http.StatusBadRequest, gin.H{
 				"status_code": -1,
@@ -65,7 +64,7 @@ func PublishList(ctx *gin.Context) {
 	token := ctx.Query("token")
 	user_id := ctx.Query("user_id")
 	uid, _ := strconv.Atoi(user_id)
-	rsp, _ := client.SrvClient.PublishList(context.Background(), &proto.DouyinPublishListRequest{
+	rsp, _ := global.SrvConn().PublishList(context.Background(), &proto.DouyinPublishListRequest{
 		Token:  token,
 		UserId: int64(uid),
 	})
@@ -85,13 +84,13 @@ func SaveVideoAndCover(data *multipart.FileHeader) error {
 	if err != nil {
 		return err
 	}
-	err = ioutil.WriteFile(cfg.StaticDir+"/tmp/test.mp4", buf, 0644)
+	err = ioutil.WriteFile(global.ServerConfig.StaticInfo.StaticDir+"/tmp/test.mp4", buf, 0644)
 	if err != nil {
 		return err
 	}
 	cmd := []string{
 		"$(docker run --rm -i -v",
-		cfg.StaticDir + "/tmp:/tmp",
+		global.ServerConfig.StaticInfo.StaticDir + "/tmp:/tmp",
 		"linuxserver/ffmpeg",
 		"-i /tmp/test.mp4",
 		"-ss 00:00:05",

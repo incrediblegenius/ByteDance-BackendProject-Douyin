@@ -1,5 +1,5 @@
 {
-  "name": "douyin-srv",
+  "name": "douyin-web",
   "tag": {
     "ft1":"douyin",
     "ft2":"user"
@@ -9,11 +9,7 @@
     "port":8081,
     "static_dir":"/Users/evil/Desktop/Go/Douyin/Gin/static"
   },
-  "mysql": {
-    "host": "127.0.0.1",
-    "port": 3306,
-    "user": "root",
-    "password": "root",
-    "db": "douyin_user"
+  "srv_server":{
+    "name":"douyin-srv"
   }
 }

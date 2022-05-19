@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"Douyin/ProxyServer/client"
+	"Douyin/global"
 	"Douyin/proto"
 	"context"
 	"net/http"
@@ -24,7 +24,7 @@ func CommentAction(ctx *gin.Context) {
 	if ac == 2 {
 		cid, _ = strconv.Atoi(comment_id)
 	}
-	rsp, err := client.SrvClient.CommentAction(context.Background(), &proto.DouyinCommentActionRequest{
+	rsp, err := global.SrvConn().CommentAction(context.Background(), &proto.DouyinCommentActionRequest{
 		UserId:      int64(uid),
 		Token:       token,
 		VideoId:     int64(vid),
@@ -55,7 +55,7 @@ func CommentList(ctx *gin.Context) {
 	vid, _ := strconv.Atoi(video_id)
 	uid, _ := strconv.Atoi(user_id)
 
-	rsp, err := client.SrvClient.CommentList(context.Background(), &proto.DouyinCommentListRequest{
+	rsp, err := global.SrvConn().CommentList(context.Background(), &proto.DouyinCommentListRequest{
 		UserId:  int64(uid),
 		Token:   token,
 		VideoId: int64(vid),

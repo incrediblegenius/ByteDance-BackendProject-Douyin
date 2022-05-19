@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"Douyin/ProxyServer/client"
+	"Douyin/global"
 	"Douyin/proto"
 	"context"
 	"net/http"
@@ -20,7 +20,7 @@ func RelationAction(ctx *gin.Context) {
 	tuid, _ := strconv.Atoi(to_user_id)
 	ac, _ := strconv.Atoi(action_type)
 
-	rsp, err := client.SrvClient.RelationAction(context.Background(), &proto.DouyinRelationActionRequest{
+	rsp, err := global.SrvConn().RelationAction(context.Background(), &proto.DouyinRelationActionRequest{
 		UserId:     int64(uid),
 		Token:      token,
 		ToUserId:   int64(tuid),
@@ -48,7 +48,7 @@ func FollowList(ctx *gin.Context) {
 
 	uid, _ := strconv.Atoi(user_id)
 
-	rsp, err := client.SrvClient.RelationFollowList(context.Background(), &proto.DouyinRelationFollowListRequest{
+	rsp, err := global.SrvConn().RelationFollowList(context.Background(), &proto.DouyinRelationFollowListRequest{
 		UserId: int64(uid),
 		Token:  token,
 	})
@@ -74,7 +74,7 @@ func FollowerList(ctx *gin.Context) {
 
 	uid, _ := strconv.Atoi(user_id)
 
-	rsp, err := client.SrvClient.RelationFollowerList(context.Background(), &proto.DouyinRelationFollowerListRequest{
+	rsp, err := global.SrvConn().RelationFollowerList(context.Background(), &proto.DouyinRelationFollowerListRequest{
 		UserId: int64(uid),
 		Token:  token,
 	})

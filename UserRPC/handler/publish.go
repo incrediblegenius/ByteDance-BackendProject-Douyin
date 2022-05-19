@@ -23,8 +23,8 @@ func (s *Server) PublishAction(ctx context.Context, req *proto.DouyinPublishActi
 
 	video := &model.Video{
 		AuthorID: id,
-		PlayUrl:  fmt.Sprintf("http://%s:%d/videos/%s.mp4", global.ServerIP, global.ServerPort, filename),
-		CoverUrl: fmt.Sprintf("http://%s:%d/covers/%s.png", global.ServerIP, global.ServerPort, filename),
+		PlayUrl:  fmt.Sprintf("http://%s:%d/videos/%s.mp4", global.ServerConfig.StaticInfo.Host, global.ServerConfig.StaticInfo.Port, filename),
+		CoverUrl: fmt.Sprintf("http://%s:%d/covers/%s.png", global.ServerConfig.StaticInfo.Host, global.ServerConfig.StaticInfo.Port, filename),
 		Title:    req.Title,
 	}
 	result := global.DB.Create(&video)

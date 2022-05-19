@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"Douyin/ProxyServer/client"
+	"Douyin/global"
 	"Douyin/proto"
 	"context"
 	"net/http"
@@ -22,7 +22,7 @@ func GetFeed(ctx *gin.Context) {
 		t = time.Now().UnixMilli()
 	}
 	// fmt.Println(t)
-	rsp, _ := client.SrvClient.GetUserFeed(context.Background(), &proto.DouyinFeedRequest{
+	rsp, _ := global.SrvConn().GetUserFeed(context.Background(), &proto.DouyinFeedRequest{
 		LatestTime: t,
 		Token:      token,
 	})

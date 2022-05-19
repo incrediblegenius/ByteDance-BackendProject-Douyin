@@ -19,7 +19,7 @@ import (
 )
 
 func main() {
-	IP := flag.String("ip", "127.0.0.1", "ip address")
+	IP := flag.String("ip", "0.0.0.0", "ip address")
 	port := flag.Int("port", 0, "port")
 	if *port == 0 {
 		*port, _ = utils.GetFreePort()
@@ -32,8 +32,8 @@ func main() {
 		panic("failed to listen:" + err.Error())
 	}
 	grpc_health_v1.RegisterHealthServer(server, health.NewServer())
-
-	success, _ := global.NamingClient.RegisterInstance(vo.RegisterInstanceParam{
+	// 服务注册 nacos
+	success, err := global.NamingClient.RegisterInstance(vo.RegisterInstanceParam{
 		Ip:          *IP,
 		Port:        uint64(*port),
 		ServiceName: global.ServerConfig.Name,
@@ -41,13 +41,14 @@ func main() {
 		Enable:      true,
 		Healthy:     true,
 		Ephemeral:   true,
+		Metadata:    global.ServerConfig.Tags,
 		ClusterName: "cluster-a",              // 默认值DEFAULT
 		GroupName:   global.NacosConfig.Group, // 默认值DEFAULT_GROUP
 	})
-	if success {
-		fmt.Println("微服务注册成功")
+	if !success {
+		panic(err)
 	}
-
+	fmt.Println("服务注册成功")
 	go func() {
 		err = server.Serve(lis)
 		if err != nil {
@@ -58,15 +59,15 @@ func main() {
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
 	// 注销服务
-	success, _ = global.NamingClient.DeregisterInstance(vo.DeregisterInstanceParam{
+	success, err = global.NamingClient.DeregisterInstance(vo.DeregisterInstanceParam{
 		Ip:          *IP,
 		Port:        uint64(*port),
 		ServiceName: global.ServerConfig.Name,
 		Ephemeral:   true,
-		Cluster:     "cluster-a",              // 默认值DEFAULT
 		GroupName:   global.NacosConfig.Group, // 默认值DEFAULT_GROUP
 	})
-	if success {
-		fmt.Println("微服务注销成功")
+	if !success {
+		panic(err)
 	}
+	fmt.Println("微服务注销成功")
 }

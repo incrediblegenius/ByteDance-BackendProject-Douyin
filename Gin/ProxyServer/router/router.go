@@ -7,6 +7,11 @@ import (
 )
 
 func InitRouter(Router *gin.Engine) {
+	Router.GET("/health", func(ctx *gin.Context) {
+		ctx.JSON(200, gin.H{
+			"message": "pong",
+		})
+	})
 	r := Router.Group("/douyin/user")
 	{
 		r.POST("/register/", handler.Register)
