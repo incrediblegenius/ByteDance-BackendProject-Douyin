@@ -1,0 +1,14 @@
+{
+  "name": "comment-srv",
+  "tag": {
+    "ft1":"douyin",
+    "ft2":"comment-service"
+  },
+  "mysql": {
+    "host": "127.0.0.1",
+    "port": 3306,
+    "user": "root",
+    "password": "root",
+    "db": "douyin_user"
+  }
+}

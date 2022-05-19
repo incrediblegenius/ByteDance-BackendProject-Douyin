@@ -17,7 +17,6 @@ func InitRouter(Router *gin.Engine) {
 		r.POST("/register/", handler.Register)
 		r.POST("/login/", handler.Login)
 		r.GET("/", handler.GetUserInfo)
-
 	}
 	r = Router.Group("/douyin")
 	{
