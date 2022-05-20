@@ -24,7 +24,8 @@ func CommentAction(ctx *gin.Context) {
 	if ac == 2 {
 		cid, _ = strconv.Atoi(comment_id)
 	}
-	rsp, err := global.UserSrv.CommentAction(context.Background(), &proto.DouyinCommentActionRequest{
+	userSrv := global.ConnMap[global.ServerConfig.SrvServerInfo.UserSrv]
+	rsp, err := userSrv.CommentAction(context.Background(), &proto.DouyinCommentActionRequest{
 		UserId:      int64(uid),
 		Token:       token,
 		VideoId:     int64(vid),
@@ -54,8 +55,8 @@ func CommentList(ctx *gin.Context) {
 	video_id := ctx.Query("video_id")
 	vid, _ := strconv.Atoi(video_id)
 	uid, _ := strconv.Atoi(user_id)
-
-	rsp, err := global.UserSrv.CommentList(context.Background(), &proto.DouyinCommentListRequest{
+	CommentSrv := global.ConnMap[global.ServerConfig.SrvServerInfo.CommentSrv]
+	rsp, err := CommentSrv.CommentList(context.Background(), &proto.DouyinCommentListRequest{
 		UserId:  int64(uid),
 		Token:   token,
 		VideoId: int64(vid),

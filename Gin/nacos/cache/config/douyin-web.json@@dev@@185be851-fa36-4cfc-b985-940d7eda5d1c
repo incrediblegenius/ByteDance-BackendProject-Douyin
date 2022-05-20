@@ -11,7 +11,7 @@
   },
   "srv_server":{
     "user_srv":"user-srv",
-    "feed_stv":"feed-srv",
+    "feed_srv":"feed-srv",
     "publish_srv":"publish-srv",
     "favorite_srv":"favorite-srv",
     "comment_srv":"comment-srv",

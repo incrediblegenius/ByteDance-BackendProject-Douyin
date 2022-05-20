@@ -18,8 +18,8 @@ func FavoriteAction(ctx *gin.Context) {
 	uid, _ := strconv.Atoi(user_id)
 	vid, _ := strconv.Atoi(video_id)
 	ac, _ := strconv.Atoi(action_type)
-
-	rsp, err := global.UserSrv.FavoriteAction(context.Background(), &proto.DouyinFavoriteActionRequest{
+	FavoSrv := global.ConnMap[global.ServerConfig.SrvServerInfo.FavoriteSrv]
+	rsp, err := FavoSrv.FavoriteAction(context.Background(), &proto.DouyinFavoriteActionRequest{
 		Token:   token,
 		UserId:  int64(uid),
 		VideoId: int64(vid),
@@ -45,8 +45,8 @@ func FavoriteList(ctx *gin.Context) {
 	token := ctx.Query("token")
 	user_id := ctx.Query("user_id")
 	uid, _ := strconv.Atoi(user_id)
-
-	rsp, err := global.UserSrv.FavoriteList(context.Background(), &proto.DouyinFavoriteListRequest{
+	FavoSrv := global.ConnMap[global.ServerConfig.SrvServerInfo.FavoriteSrv]
+	rsp, err := FavoSrv.FavoriteList(context.Background(), &proto.DouyinFavoriteListRequest{
 		Token:  token,
 		UserId: int64(uid),
 	})

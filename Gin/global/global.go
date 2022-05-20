@@ -25,12 +25,7 @@ var (
 	NamingClient naming_client.INamingClient
 	ConfigClient config_client.IConfigClient
 
-	UserSrv     proto.ServerClient
-	FeedSrv     proto.ServerClient
-	FavoriteSrv proto.ServerClient
-	PublishSrv  proto.ServerClient
-	RelationSrv proto.ServerClient
-	CommentSrv  proto.ServerClient
+	ConnMap = make(map[string]proto.ServerClient)
 )
 
 func init() {

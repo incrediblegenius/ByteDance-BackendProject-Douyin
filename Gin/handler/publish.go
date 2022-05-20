@@ -36,7 +36,8 @@ func Publish(ctx *gin.Context) {
 		c <- err
 	}(data)
 
-	rsp, err := global.UserSrv.PublishAction(context.Background(), &proto.DouyinPublishActionRequest{
+	PublishSrv := global.ConnMap[global.ServerConfig.SrvServerInfo.PublishSrv]
+	rsp, err := PublishSrv.PublishAction(context.Background(), &proto.DouyinPublishActionRequest{
 		Token:     token,
 		VideoName: filename,
 		Title:     title,
@@ -64,10 +65,15 @@ func PublishList(ctx *gin.Context) {
 	token := ctx.Query("token")
 	user_id := ctx.Query("user_id")
 	uid, _ := strconv.Atoi(user_id)
-	rsp, _ := global.UserSrv.PublishList(context.Background(), &proto.DouyinPublishListRequest{
+	PublishSrv := global.ConnMap[global.ServerConfig.SrvServerInfo.PublishSrv]
+	rsp, err := PublishSrv.PublishList(context.Background(), &proto.DouyinPublishListRequest{
 		Token:  token,
 		UserId: int64(uid),
 	})
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, rsp)
+		return
+	}
 	// fmt.Println(rsp)
 	ctx.JSON(http.StatusOK, rsp)
 }

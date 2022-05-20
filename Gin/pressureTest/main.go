@@ -14,9 +14,9 @@ const (
 
 func main() {
 	wg := sync.WaitGroup{}
-	syncChan := make(chan struct{}, 10000)
+	syncChan := make(chan struct{}, 20000)
 	start := time.Now().Unix()
-	for i := 0; i < 10000; i++ {
+	for i := 0; i < 20000; i++ {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
@@ -35,7 +35,6 @@ func main() {
 				syncChan <- struct{}{}
 			}
 		}()
-		time.Sleep(time.Millisecond)
 	}
 	wg.Wait()
 	end := time.Now().Unix()

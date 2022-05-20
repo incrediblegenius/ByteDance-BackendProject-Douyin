@@ -22,10 +22,18 @@ func GetFeed(ctx *gin.Context) {
 		t = time.Now().UnixMilli()
 	}
 	// fmt.Println(t)
-	rsp, _ := global.UserSrv.GetUserFeed(context.Background(), &proto.DouyinFeedRequest{
+	FeedSrv := global.ConnMap[global.ServerConfig.SrvServerInfo.FeedSrv]
+	rsp, err := FeedSrv.GetUserFeed(context.Background(), &proto.DouyinFeedRequest{
 		LatestTime: t,
 		Token:      token,
 	})
+	if err != nil {
+		ctx.JSON(http.StatusBadGateway, gin.H{
+			"status_code": -1,
+			"status_msg":  err.Error(),
+		})
+		return
+	}
 	// fmt.Println(rsp)
 
 	ctx.JSON(http.StatusOK, rsp)
