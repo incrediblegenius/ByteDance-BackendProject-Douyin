@@ -22,7 +22,7 @@ func GetFeed(ctx *gin.Context) {
 		t = time.Now().UnixMilli()
 	}
 	// fmt.Println(t)
-	rsp, _ := global.SrvConn().GetUserFeed(context.Background(), &proto.DouyinFeedRequest{
+	rsp, _ := global.UserSrv.GetUserFeed(context.Background(), &proto.DouyinFeedRequest{
 		LatestTime: t,
 		Token:      token,
 	})

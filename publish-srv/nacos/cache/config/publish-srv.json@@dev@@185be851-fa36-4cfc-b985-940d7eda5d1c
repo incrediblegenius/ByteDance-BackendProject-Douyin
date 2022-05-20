@@ -1,0 +1,19 @@
+{
+  "name": "publish-srv",
+  "tag": {
+    "ft1":"douyin",
+    "ft2":"publish-service"
+  },
+  "static_server":{
+    "host":"10.252.138.8",
+    "port":8081,
+    "static_dir":"/Users/evil/Desktop/Go/Douyin/Gin/static"
+  },
+  "mysql": {
+    "host": "127.0.0.1",
+    "port": 3306,
+    "user": "root",
+    "password": "root",
+    "db": "douyin_user"
+  }
+}

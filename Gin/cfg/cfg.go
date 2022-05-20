@@ -6,15 +6,20 @@ type StaticServerConfig struct {
 	StaticDir string `json:"static_dir"`
 }
 
-type SrvServerConfig struct {
-	Name string `json:"name"`
-}
-
 type ServerConfig struct {
 	Name          string             `json:"name"`
 	Tags          map[string]string  `json:"tag"`
 	StaticInfo    StaticServerConfig `json:"static_server"`
-	SrvServerInfo SrvServerConfig    `json:"srv_server"`
+	SrvServerInfo ServiceConfig      `json:"srv_server"`
+}
+
+type ServiceConfig struct {
+	UserSrv     string `json:"user_srv"`
+	FeedSrv     string `json:"feed_srv"`
+	PublishSrv  string `json:"publish_srv"`
+	FavoriteSrv string `json:"favorite_srv"`
+	RelationSrv string `json:"relation_srv"`
+	CommentSrv  string `json:"comment_srv"`
 }
 
 type NacosConfig struct {

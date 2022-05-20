@@ -36,7 +36,7 @@ func Publish(ctx *gin.Context) {
 		c <- err
 	}(data)
 
-	rsp, err := global.SrvConn().PublishAction(context.Background(), &proto.DouyinPublishActionRequest{
+	rsp, err := global.UserSrv.PublishAction(context.Background(), &proto.DouyinPublishActionRequest{
 		Token:     token,
 		VideoName: filename,
 		Title:     title,
@@ -64,7 +64,7 @@ func PublishList(ctx *gin.Context) {
 	token := ctx.Query("token")
 	user_id := ctx.Query("user_id")
 	uid, _ := strconv.Atoi(user_id)
-	rsp, _ := global.SrvConn().PublishList(context.Background(), &proto.DouyinPublishListRequest{
+	rsp, _ := global.UserSrv.PublishList(context.Background(), &proto.DouyinPublishListRequest{
 		Token:  token,
 		UserId: int64(uid),
 	})

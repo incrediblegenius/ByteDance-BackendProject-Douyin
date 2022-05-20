@@ -12,8 +12,6 @@ import (
 	"github.com/nacos-group/nacos-sdk-go/common/constant"
 	"github.com/nacos-group/nacos-sdk-go/vo"
 	"github.com/spf13/viper"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 )
 
 const (
@@ -23,15 +21,20 @@ const (
 var (
 	ServerConfig cfg.ServerConfig
 	NacosConfig  cfg.NacosConfig
-	SrvClient    proto.ServerClient
+
 	NamingClient naming_client.INamingClient
 	ConfigClient config_client.IConfigClient
+
+	UserSrv     proto.ServerClient
+	FeedSrv     proto.ServerClient
+	FavoriteSrv proto.ServerClient
+	PublishSrv  proto.ServerClient
+	RelationSrv proto.ServerClient
+	CommentSrv  proto.ServerClient
 )
 
 func init() {
 	InitNacos()
-	// InitSrvConn()
-
 }
 
 func InitNacos() {
@@ -101,22 +104,29 @@ func InitNacos() {
 	fmt.Println("成功从nacos读取配置")
 }
 
-func SrvConn() proto.ServerClient {
-	instance, err := NamingClient.SelectOneHealthyInstance(vo.SelectOneHealthInstanceParam{
-		ServiceName: ServerConfig.SrvServerInfo.Name,
-		GroupName:   NacosConfig.Group,
-	})
-	if err != nil {
-		panic(err)
-	}
-	conn, err := grpc.Dial(
-		fmt.Sprintf("%s:%d", instance.Ip, instance.Port),
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-	)
-	if err != nil {
-		panic(err)
-	}
-	SrvClient = proto.NewServerClient(conn)
+// func UserSrvConn() proto.ServerClient {
+// 	// nacos 的负载均衡设置TODO
+// 	// instance, err := NamingClient.SelectOneHealthyInstance(vo.SelectOneHealthInstanceParam{
+// 	// 	ServiceName: ServerConfig.SrvServerInfo.UserSrv,
+// 	// 	GroupName:   NacosConfig.Group,
+// 	// })
+// 	// if err != nil {
+// 	// 	panic(err)
+// 	// }
 
-	return SrvClient
-}
+// 	conn, err := grpc.Dial(
+// 		nacosgrpc.Target(fmt.Sprintf("http://nacos:nacos@%s:%d/nacos", NacosConfig.Host, NacosConfig.Port),
+// 			ServerConfig.SrvServerInfo.UserSrv,
+// 			nacosgrpc.OptionNameSpaceID(NacosConfig.Namespace),
+// 			nacosgrpc.OptionGroupName(NacosConfig.Group)),
+// 		grpc.WithTransportCredentials(insecure.NewCredentials()),
+// 		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
+// 	)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	UserSrv = proto.NewServerClient(conn)
+
+// 	return UserSrv
+
+// }

@@ -21,7 +21,7 @@ func Register(ctx *gin.Context) {
 		return
 	}
 	var rsp *proto.DouyinUserRegisterResponse
-	rsp, _ = global.SrvConn().Register(context.Background(), &proto.DouyinUserRegisterRequest{
+	rsp, _ = global.UserSrv.Register(context.Background(), &proto.DouyinUserRegisterRequest{
 		Username: username,
 		Password: password,
 	})
@@ -53,7 +53,7 @@ func Login(ctx *gin.Context) {
 		return
 	}
 	var rsp *proto.DouyinUserRegisterResponse
-	rsp, _ = global.SrvConn().Login(context.Background(), &proto.DouyinUserRegisterRequest{
+	rsp, _ = global.UserSrv.Login(context.Background(), &proto.DouyinUserRegisterRequest{
 		Username: username,
 		Password: password,
 	})
@@ -84,7 +84,7 @@ func GetUserInfo(ctx *gin.Context) {
 		})
 		return
 	}
-	rsp, err := global.SrvConn().GetUserById(context.Background(), &proto.IdRequest{
+	rsp, err := global.UserSrv.GetUserById(context.Background(), &proto.IdRequest{
 		Id:        int64(id),
 		Token:     token,
 		NeedToken: true,

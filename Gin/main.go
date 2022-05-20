@@ -2,6 +2,7 @@ package main
 
 import (
 	"Douyin/global"
+	_ "Douyin/initService"
 	"Douyin/router"
 	"fmt"
 	"net/http"

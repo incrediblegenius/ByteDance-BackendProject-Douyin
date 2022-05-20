@@ -5,8 +5,6 @@ go 1.18
 require (
 	github.com/gin-gonic/gin v1.7.7
 	github.com/golang/glog v1.0.0
-	github.com/magicdvd/nacos-client v0.0.0-20210609122731-160b0bb76754
-	github.com/magicdvd/nacos-grpc v0.0.0-20210609124341-fc40bad9c022
 	github.com/nacos-group/nacos-sdk-go v1.1.1
 	github.com/spf13/viper v1.11.0
 	google.golang.org/grpc v1.46.0
@@ -34,6 +32,8 @@ require (
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/kr/pretty v0.2.0 // indirect
 	github.com/leodido/go-urn v1.2.0 // indirect
+	github.com/magicdvd/nacos-client v0.0.0-20210609122731-160b0bb76754 // indirect
+	github.com/magicdvd/nacos-grpc v0.0.0-20210609124341-fc40bad9c022 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/mitchellh/mapstructure v1.4.3 // indirect
