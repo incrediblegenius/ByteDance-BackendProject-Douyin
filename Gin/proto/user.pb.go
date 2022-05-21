@@ -25,8 +25,8 @@ type DouyinUserRegisterRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Username string `protobuf:"bytes,1,opt,name=username,proto3" json:"username,omitempty"` //注册用户名，最长32
-	Password string `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"` //密码，最长32
+	Username string `protobuf:"bytes,1,opt,name=username,proto3" json:"username"` //注册用户名，最长32
+	Password string `protobuf:"bytes,2,opt,name=password,proto3" json:"password"` //密码，最长32
 }
 
 func (x *DouyinUserRegisterRequest) Reset() {
@@ -80,10 +80,10 @@ type DouyinUserRegisterResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	StatusCode int32  `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code,omitempty"` //状态码,0-success, others-fail
-	StatusMsg  string `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg,omitempty"`     //状态消息
-	UserId     int64  `protobuf:"varint,3,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`             //用户id
-	Token      string `protobuf:"bytes,4,opt,name=token,proto3" json:"token,omitempty"`                              //用户鉴权token
+	StatusCode int32  `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code"` //状态码,0-success, others-fail
+	StatusMsg  string `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg"`     //状态消息
+	UserId     int64  `protobuf:"varint,3,opt,name=user_id,json=userId,proto3" json:"user_id"`             //用户id
+	Token      string `protobuf:"bytes,4,opt,name=token,proto3" json:"token"`                              //用户鉴权token
 }
 
 func (x *DouyinUserRegisterResponse) Reset() {
@@ -151,11 +151,11 @@ type User struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id            int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Name          string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	FollowCount   int64  `protobuf:"varint,3,opt,name=follow_count,json=followCount,proto3" json:"follow_count,omitempty"`
-	FollowerCount int64  `protobuf:"varint,4,opt,name=follower_count,json=followerCount,proto3" json:"follower_count,omitempty"`
-	IsFollow      bool   `protobuf:"varint,5,opt,name=is_follow,json=isFollow,proto3" json:"is_follow,omitempty"`
+	Id            int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id"`
+	Name          string `protobuf:"bytes,2,opt,name=name,proto3" json:"name"`
+	FollowCount   int64  `protobuf:"varint,3,opt,name=follow_count,json=followCount,proto3" json:"follow_count"`
+	FollowerCount int64  `protobuf:"varint,4,opt,name=follower_count,json=followerCount,proto3" json:"follower_count"`
+	IsFollow      bool   `protobuf:"varint,5,opt,name=is_follow,json=isFollow,proto3" json:"is_follow"`
 }
 
 func (x *User) Reset() {
@@ -230,10 +230,10 @@ type IdRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id        int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Token     string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`
-	NeedToken bool   `protobuf:"varint,3,opt,name=need_token,json=needToken,proto3" json:"need_token,omitempty"`
-	SearchId  int64  `protobuf:"varint,4,opt,name=search_id,json=searchId,proto3" json:"search_id,omitempty"`
+	Id        int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id"`
+	Token     string `protobuf:"bytes,2,opt,name=token,proto3" json:"token"`
+	NeedToken bool   `protobuf:"varint,3,opt,name=need_token,json=needToken,proto3" json:"need_token"`
+	SearchId  int64  `protobuf:"varint,4,opt,name=search_id,json=searchId,proto3" json:"search_id"`
 }
 
 func (x *IdRequest) Reset() {
@@ -301,8 +301,8 @@ type DouyinFeedRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	LatestTime int64  `protobuf:"varint,1,opt,name=latest_time,json=latestTime,proto3" json:"latest_time,omitempty"`
-	Token      string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`
+	LatestTime int64  `protobuf:"varint,1,opt,name=latest_time,json=latestTime,proto3" json:"latest_time"`
+	Token      string `protobuf:"bytes,2,opt,name=token,proto3" json:"token"`
 }
 
 func (x *DouyinFeedRequest) Reset() {
@@ -356,10 +356,10 @@ type DouyinFeedResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	StatusCode int32    `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code,omitempty"` //状态码,0-success, others-fail
-	StatusMsg  string   `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg,omitempty"`     //状态消息
-	VideoList  []*Video `protobuf:"bytes,3,rep,name=video_list,json=videoList,proto3" json:"video_list,omitempty"`
-	NextTime   int64    `protobuf:"varint,4,opt,name=next_time,json=nextTime,proto3" json:"next_time,omitempty"` // 本次的返回视频中时间戳最早的，作为下次请求的latest_time
+	StatusCode int32    `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code"` //状态码,0-success, others-fail
+	StatusMsg  string   `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg"`     //状态消息
+	VideoList  []*Video `protobuf:"bytes,3,rep,name=video_list,json=videoList,proto3" json:"video_list"`
+	NextTime   int64    `protobuf:"varint,4,opt,name=next_time,json=nextTime,proto3" json:"next_time"` // 本次的返回视频中时间戳最早的，作为下次请求的latest_time
 }
 
 func (x *DouyinFeedResponse) Reset() {
@@ -427,14 +427,14 @@ type Video struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id            int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`                                            // 视频唯一标识
-	Author        *User  `protobuf:"bytes,2,opt,name=author,proto3" json:"author,omitempty"`                                     // 视频作者信息
-	PlayUrl       string `protobuf:"bytes,3,opt,name=play_url,json=playUrl,proto3" json:"play_url,omitempty"`                    // 视频播放地址
-	CoverUrl      string `protobuf:"bytes,4,opt,name=cover_url,json=coverUrl,proto3" json:"cover_url,omitempty"`                 // 视频封面地址
-	FavoriteCount int64  `protobuf:"varint,5,opt,name=favorite_count,json=favoriteCount,proto3" json:"favorite_count,omitempty"` // 视频点赞数
-	CommentCount  int64  `protobuf:"varint,6,opt,name=comment_count,json=commentCount,proto3" json:"comment_count,omitempty"`    // 视频评论数
-	IsFavorite    bool   `protobuf:"varint,7,opt,name=is_favorite,json=isFavorite,proto3" json:"is_favorite,omitempty"`          // 是否已点赞
-	Title         string `protobuf:"bytes,8,opt,name=title,proto3" json:"title,omitempty"`                                       // 视频标题
+	Id            int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id"`                                            // 视频唯一标识
+	Author        *User  `protobuf:"bytes,2,opt,name=author,proto3" json:"author"`                                     // 视频作者信息
+	PlayUrl       string `protobuf:"bytes,3,opt,name=play_url,json=playUrl,proto3" json:"play_url"`                    // 视频播放地址
+	CoverUrl      string `protobuf:"bytes,4,opt,name=cover_url,json=coverUrl,proto3" json:"cover_url"`                 // 视频封面地址
+	FavoriteCount int64  `protobuf:"varint,5,opt,name=favorite_count,json=favoriteCount,proto3" json:"favorite_count"` // 视频点赞数
+	CommentCount  int64  `protobuf:"varint,6,opt,name=comment_count,json=commentCount,proto3" json:"comment_count"`    // 视频评论数
+	IsFavorite    bool   `protobuf:"varint,7,opt,name=is_favorite,json=isFavorite,proto3" json:"is_favorite"`          // 是否已点赞
+	Title         string `protobuf:"bytes,8,opt,name=title,proto3" json:"title"`                                       // 视频标题
 }
 
 func (x *Video) Reset() {
@@ -530,9 +530,9 @@ type DouyinPublishActionRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Token     string `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`                          //用户鉴权token
-	VideoName string `protobuf:"bytes,2,opt,name=video_name,json=videoName,proto3" json:"video_name,omitempty"` //发布的视频的名字
-	Title     string `protobuf:"bytes,3,opt,name=title,proto3" json:"title,omitempty"`                          //发布的视频的标题
+	Token     string `protobuf:"bytes,1,opt,name=token,proto3" json:"token"`                          //用户鉴权token
+	VideoName string `protobuf:"bytes,2,opt,name=video_name,json=videoName,proto3" json:"video_name"` //发布的视频的名字
+	Title     string `protobuf:"bytes,3,opt,name=title,proto3" json:"title"`                          //发布的视频的标题
 }
 
 func (x *DouyinPublishActionRequest) Reset() {
@@ -593,8 +593,8 @@ type DouyinPublishActionResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	StatusCode int32  `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code,omitempty"` //状态码,0-success, others-fail
-	StatusMsg  string `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg,omitempty"`     //状态消息
+	StatusCode int32  `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code"` //状态码,0-success, others-fail
+	StatusMsg  string `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg"`     //状态消息
 }
 
 func (x *DouyinPublishActionResponse) Reset() {
@@ -648,8 +648,8 @@ type DouyinPublishListRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Token  string `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`                  //用户鉴权token
-	UserId int64  `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"` //用户id
+	Token  string `protobuf:"bytes,1,opt,name=token,proto3" json:"token"`                  //用户鉴权token
+	UserId int64  `protobuf:"varint,2,opt,name=user_id,json=userId,proto3" json:"user_id"` //用户id
 }
 
 func (x *DouyinPublishListRequest) Reset() {
@@ -703,9 +703,9 @@ type DouyinPublishListResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	StatusCode int32    `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code,omitempty"` //状态码,0-success, others-fail
-	StatusMsg  string   `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg,omitempty"`     //状态消息
-	VideoList  []*Video `protobuf:"bytes,3,rep,name=video_list,json=videoList,proto3" json:"video_list,omitempty"`     // 用户的视频列表
+	StatusCode int32    `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code"` //状态码,0-success, others-fail
+	StatusMsg  string   `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg"`     //状态消息
+	VideoList  []*Video `protobuf:"bytes,3,rep,name=video_list,json=videoList,proto3" json:"video_list"`     // 用户的视频列表
 }
 
 func (x *DouyinPublishListResponse) Reset() {
@@ -766,8 +766,8 @@ type DouyinFavoriteListRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserId int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Token  string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`
+	UserId int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id"`
+	Token  string `protobuf:"bytes,2,opt,name=token,proto3" json:"token"`
 }
 
 func (x *DouyinFavoriteListRequest) Reset() {
@@ -821,9 +821,9 @@ type DouyinFavoriteListResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	StatusCode int32    `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code,omitempty"`
-	StatusMsg  string   `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg,omitempty"`
-	VideoList  []*Video `protobuf:"bytes,3,rep,name=video_list,json=videoList,proto3" json:"video_list,omitempty"`
+	StatusCode int32    `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code"`
+	StatusMsg  string   `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg"`
+	VideoList  []*Video `protobuf:"bytes,3,rep,name=video_list,json=videoList,proto3" json:"video_list"`
 }
 
 func (x *DouyinFavoriteListResponse) Reset() {
@@ -884,10 +884,10 @@ type DouyinFavoriteActionRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserId  int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Token   string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`
-	VideoId int64  `protobuf:"varint,3,opt,name=video_id,json=videoId,proto3" json:"video_id,omitempty"`
-	Action  int32  `protobuf:"varint,4,opt,name=action,proto3" json:"action,omitempty"` //1:favorite,2:unfavorite
+	UserId  int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id"`
+	Token   string `protobuf:"bytes,2,opt,name=token,proto3" json:"token"`
+	VideoId int64  `protobuf:"varint,3,opt,name=video_id,json=videoId,proto3" json:"video_id"`
+	Action  int32  `protobuf:"varint,4,opt,name=action,proto3" json:"action"` //1:favorite,2:unfavorite
 }
 
 func (x *DouyinFavoriteActionRequest) Reset() {
@@ -955,8 +955,8 @@ type DouyinFavoriteActionResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	StatusCode int32  `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code,omitempty"`
-	StatusMsg  string `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg,omitempty"`
+	StatusCode int32  `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code"`
+	StatusMsg  string `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg"`
 }
 
 func (x *DouyinFavoriteActionResponse) Reset() {
@@ -1010,8 +1010,8 @@ type VideoIdRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	VideoId  int64 `protobuf:"varint,1,opt,name=video_id,json=videoId,proto3" json:"video_id,omitempty"`
-	SearchId int64 `protobuf:"varint,2,opt,name=search_id,json=searchId,proto3" json:"search_id,omitempty"`
+	VideoId  int64 `protobuf:"varint,1,opt,name=video_id,json=videoId,proto3" json:"video_id"`
+	SearchId int64 `protobuf:"varint,2,opt,name=search_id,json=searchId,proto3" json:"search_id"`
 }
 
 func (x *VideoIdRequest) Reset() {
@@ -1065,12 +1065,12 @@ type DouyinCommentActionRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserId      int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`               // 用户id
-	Token       string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`                                // 用户鉴权token
-	VideoId     int64  `protobuf:"varint,3,opt,name=video_id,json=videoId,proto3" json:"video_id,omitempty"`            // 视频id
-	ActionType  int32  `protobuf:"varint,4,opt,name=action_type,json=actionType,proto3" json:"action_type,omitempty"`   // 1-发布评论，2-删除评论
-	CommentText string `protobuf:"bytes,5,opt,name=comment_text,json=commentText,proto3" json:"comment_text,omitempty"` // 用户填写的评论内容，在action_type=1的时候使用
-	CommentId   int64  `protobuf:"varint,6,opt,name=comment_id,json=commentId,proto3" json:"comment_id,omitempty"`      // 要删除的评论id，在action_type=2的时候使用
+	UserId      int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id"`               // 用户id
+	Token       string `protobuf:"bytes,2,opt,name=token,proto3" json:"token"`                                // 用户鉴权token
+	VideoId     int64  `protobuf:"varint,3,opt,name=video_id,json=videoId,proto3" json:"video_id"`            // 视频id
+	ActionType  int32  `protobuf:"varint,4,opt,name=action_type,json=actionType,proto3" json:"action_type"`   // 1-发布评论，2-删除评论
+	CommentText string `protobuf:"bytes,5,opt,name=comment_text,json=commentText,proto3" json:"comment_text"` // 用户填写的评论内容，在action_type=1的时候使用
+	CommentId   int64  `protobuf:"varint,6,opt,name=comment_id,json=commentId,proto3" json:"comment_id"`      // 要删除的评论id，在action_type=2的时候使用
 }
 
 func (x *DouyinCommentActionRequest) Reset() {
@@ -1152,8 +1152,8 @@ type DouyinCommentActionResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	StatusCode int32  `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code,omitempty"` // 状态码，0-成功，其他值-失败
-	StatusMsg  string `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg,omitempty"`     // 返回状态描述
+	StatusCode int32  `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code"` // 状态码，0-成功，其他值-失败
+	StatusMsg  string `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg"`     // 返回状态描述
 }
 
 func (x *DouyinCommentActionResponse) Reset() {
@@ -1207,9 +1207,9 @@ type DouyinCommentListRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserId  int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`    // 用户id
-	Token   string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`                     // 用户鉴权token
-	VideoId int64  `protobuf:"varint,3,opt,name=video_id,json=videoId,proto3" json:"video_id,omitempty"` // 视频id
+	UserId  int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id"`    // 用户id
+	Token   string `protobuf:"bytes,2,opt,name=token,proto3" json:"token"`                     // 用户鉴权token
+	VideoId int64  `protobuf:"varint,3,opt,name=video_id,json=videoId,proto3" json:"video_id"` // 视频id
 }
 
 func (x *DouyinCommentListRequest) Reset() {
@@ -1270,9 +1270,9 @@ type DouyinCommentListResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	StatusCode  int32      `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code,omitempty"`   // 状态码，0-成功，其他值-失败
-	StatusMsg   string     `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg,omitempty"`       // 返回状态描述
-	CommentList []*Comment `protobuf:"bytes,3,rep,name=comment_list,json=commentList,proto3" json:"comment_list,omitempty"` // 评论列表
+	StatusCode  int32      `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code"`   // 状态码，0-成功，其他值-失败
+	StatusMsg   string     `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg"`       // 返回状态描述
+	CommentList []*Comment `protobuf:"bytes,3,rep,name=comment_list,json=commentList,proto3" json:"comment_list"` // 评论列表
 }
 
 func (x *DouyinCommentListResponse) Reset() {
@@ -1333,10 +1333,10 @@ type Comment struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id         int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`                                  // 视频评论id
-	User       *User  `protobuf:"bytes,2,opt,name=user,proto3" json:"user,omitempty"`                               // 评论用户信息
-	Content    string `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`                         // 评论内容
-	CreateDate string `protobuf:"bytes,4,opt,name=create_date,json=createDate,proto3" json:"create_date,omitempty"` // 评论发布日期，格式 mm-dd
+	Id         int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id"`                                  // 视频评论id
+	User       *User  `protobuf:"bytes,2,opt,name=user,proto3" json:"user"`                               // 评论用户信息
+	Content    string `protobuf:"bytes,3,opt,name=content,proto3" json:"content"`                         // 评论内容
+	CreateDate string `protobuf:"bytes,4,opt,name=create_date,json=createDate,proto3" json:"create_date"` // 评论发布日期，格式 mm-dd
 }
 
 func (x *Comment) Reset() {
@@ -1404,10 +1404,10 @@ type DouyinRelationActionRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserId     int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`             // 用户id
-	Token      string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`                              // 用户鉴权token
-	ToUserId   int64  `protobuf:"varint,3,opt,name=to_user_id,json=toUserId,proto3" json:"to_user_id,omitempty"`     // 对方用户id
-	ActionType int32  `protobuf:"varint,4,opt,name=action_type,json=actionType,proto3" json:"action_type,omitempty"` // 1-关注，2-取消关注
+	UserId     int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id"`             // 用户id
+	Token      string `protobuf:"bytes,2,opt,name=token,proto3" json:"token"`                              // 用户鉴权token
+	ToUserId   int64  `protobuf:"varint,3,opt,name=to_user_id,json=toUserId,proto3" json:"to_user_id"`     // 对方用户id
+	ActionType int32  `protobuf:"varint,4,opt,name=action_type,json=actionType,proto3" json:"action_type"` // 1-关注，2-取消关注
 }
 
 func (x *DouyinRelationActionRequest) Reset() {
@@ -1475,8 +1475,8 @@ type DouyinRelationActionResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	StatusCode int32  `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code,omitempty"` // 状态码，0-成功，其他值-失败
-	StatusMsg  string `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg,omitempty"`     // 返回状态描述
+	StatusCode int32  `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code"` // 状态码，0-成功，其他值-失败
+	StatusMsg  string `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg"`     // 返回状态描述
 }
 
 func (x *DouyinRelationActionResponse) Reset() {
@@ -1530,8 +1530,8 @@ type DouyinRelationFollowListRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserId int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"` // 用户id
-	Token  string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`                  // 用户鉴权token
+	UserId int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id"` // 用户id
+	Token  string `protobuf:"bytes,2,opt,name=token,proto3" json:"token"`                  // 用户鉴权token
 }
 
 func (x *DouyinRelationFollowListRequest) Reset() {
@@ -1585,9 +1585,9 @@ type DouyinRelationFollowListResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	StatusCode int32   `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code,omitempty"` // 状态码，0-成功，其他值-失败
-	StatusMsg  string  `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg,omitempty"`     // 返回状态描述
-	UserList   []*User `protobuf:"bytes,3,rep,name=user_list,json=userList,proto3" json:"user_list,omitempty"`        // 用户信息列表
+	StatusCode int32   `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code"` // 状态码，0-成功，其他值-失败
+	StatusMsg  string  `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg"`     // 返回状态描述
+	UserList   []*User `protobuf:"bytes,3,rep,name=user_list,json=userList,proto3" json:"user_list"`        // 用户信息列表
 }
 
 func (x *DouyinRelationFollowListResponse) Reset() {
@@ -1648,8 +1648,8 @@ type DouyinRelationFollowerListRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserId int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"` // 用户id
-	Token  string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`                  // 用户鉴权token
+	UserId int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id"` // 用户id
+	Token  string `protobuf:"bytes,2,opt,name=token,proto3" json:"token"`                  // 用户鉴权token
 }
 
 func (x *DouyinRelationFollowerListRequest) Reset() {
@@ -1703,9 +1703,9 @@ type DouyinRelationFollowerListResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	StatusCode int32   `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code,omitempty"` // 状态码，0-成功，其他值-失败
-	StatusMsg  string  `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg,omitempty"`     // 返回状态描述
-	UserList   []*User `protobuf:"bytes,3,rep,name=user_list,json=userList,proto3" json:"user_list,omitempty"`        // 用户列表
+	StatusCode int32   `protobuf:"varint,1,opt,name=status_code,json=statusCode,proto3" json:"status_code"` // 状态码，0-成功，其他值-失败
+	StatusMsg  string  `protobuf:"bytes,2,opt,name=status_msg,json=statusMsg,proto3" json:"status_msg"`     // 返回状态描述
+	UserList   []*User `protobuf:"bytes,3,rep,name=user_list,json=userList,proto3" json:"user_list"`        // 用户列表
 }
 
 func (x *DouyinRelationFollowerListResponse) Reset() {

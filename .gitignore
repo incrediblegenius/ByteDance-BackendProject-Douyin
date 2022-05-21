@@ -2,3 +2,4 @@
 *.mp4
 *.png
 *.log
+user-srv/Dockerfile
