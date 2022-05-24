@@ -95,7 +95,7 @@ func SaveVideoAndCover(data *multipart.FileHeader) error {
 		return err
 	}
 	cmd := []string{
-		"$(sudo docker run --rm -i -v",
+		"$(docker run --rm -i -v",
 		global.ServerConfig.StaticInfo.StaticDir + "/tmp:/tmp",
 		"linuxserver/ffmpeg",
 		"-i /tmp/test.mp4",

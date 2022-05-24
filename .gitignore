@@ -3,3 +3,4 @@
 *.png
 *.log
 user-srv/Dockerfile
+Gin/nacos/cache/naming/*

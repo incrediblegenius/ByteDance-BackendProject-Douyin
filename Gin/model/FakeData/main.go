@@ -187,8 +187,8 @@ func CountComments() {
 }
 
 func main() {
-	// CreateVideos()
-	// CreateLikes(1000)
+	CreateVideos()
+	CreateLikes(1000)
 	CreateRealations(1000)
-	// CountComments()
+	CountComments()
 }
