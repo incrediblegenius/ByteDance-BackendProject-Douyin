@@ -1,7 +1,6 @@
 package main
 
 import (
-	"Douyin/global"
 	"Douyin/model"
 	"bufio"
 	"fmt"
@@ -91,12 +90,12 @@ func CreateVideos() {
 				result := DB.Create(&model.Video{
 					AuthorID: ID,
 					PlayUrl:  url,
-					CoverUrl: fmt.Sprintf("http://%s:%d/covers/%s.png", global.ServerConfig.StaticInfo.Host, global.ServerConfig.StaticInfo.Port, filename),
+					CoverUrl: fmt.Sprintf("http://%s:%d/covers/%s.png", "10.252.133.16", 8081, filename),
 				})
 				if result.Error != nil {
 					fmt.Println("插入失败")
 				}
-				os.Rename(fmt.Sprintf(Dir+"/test%d.png", cnt), global.ServerConfig.StaticInfo.StaticDir+"/covers/"+filename+".png")
+				os.Rename(fmt.Sprintf(Dir+"/test%d.png", cnt), "/Users/evil/Desktop/Go/Douyin/Gin/static/covers/"+filename+".png")
 				os.Remove(fmt.Sprintf(Dir+"/test%d.mp4", cnt))
 				<-ch
 				wg.Done()
@@ -117,8 +116,8 @@ func SaveVideoAndCover(cnt int) error {
 		"linuxserver/ffmpeg",
 		fmt.Sprintf("-i /tmp/test%d.mp4", cnt),
 		"-ss 00:00:05",
-		"-frames:v 1 test.png",
-		fmt.Sprintf("-c:a copy /tmp/test%d.png)", cnt),
+		"-frames:v 1 -lossless 0 -vf scale=iw/5:ih/5 -q 75",
+		fmt.Sprintf("/tmp/test%d.png)", cnt),
 	}
 	err := exec.Command("/bin/bash", "-c", strings.Join(cmd, " ")).Run()
 	if err != nil {
@@ -131,7 +130,7 @@ func CreateLikes(nums int) {
 
 	for i := 0; i < nums; i++ {
 		uid := rand.Intn(50) + 1
-		vid := rand.Intn(228) + 1
+		vid := rand.Intn(64) + 1
 
 		like := model.FavoriteVideo{}
 		result := DB.First(&like, "user_id = ? and video_id = ?", uid, vid)
@@ -190,6 +189,6 @@ func CountComments() {
 func main() {
 	// CreateVideos()
 	// CreateLikes(1000)
-	// CreateRealations(1000)
-	CountComments()
+	CreateRealations(1000)
+	// CountComments()
 }

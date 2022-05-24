@@ -39,7 +39,7 @@ func main() {
 		os.MkdirAll(global.ServerConfig.StaticInfo.StaticDir+"/tmp", 0777)
 		http.Handle("/", http.FileServer(http.Dir(global.ServerConfig.StaticInfo.StaticDir)))
 		if e := http.ListenAndServe(":8081", nil); e != nil {
-			glog.Fatal(e)
+			panic(e)
 		}
 	}()
 	router.InitRouter(r)

@@ -95,13 +95,13 @@ func SaveVideoAndCover(data *multipart.FileHeader) error {
 		return err
 	}
 	cmd := []string{
-		"$(docker run --rm -i -v",
+		"$(sudo docker run --rm -i -v",
 		global.ServerConfig.StaticInfo.StaticDir + "/tmp:/tmp",
 		"linuxserver/ffmpeg",
 		"-i /tmp/test.mp4",
 		"-ss 00:00:05",
-		"-frames:v 1 test.png",
-		"-c:a copy /tmp/test.png)",
+		"-frames:v 1 -lossless 0 -vf scale=iw/5:ih/5 -q 75",
+		"/tmp/test.png)",
 	}
 	err = exec.Command("/bin/bash", "-c", strings.Join(cmd, " ")).Run()
 	if err != nil {
