@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: douyin-user
+  labels:
+    app: user-server
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: user-serve
+  template:
+    metadata:
+      labels:
+        app: user-serve
+    spec:
+      containers:
+        - name: douyin-user
+          image: ccr.ccs.tencentyun.com/douyin-test/user-srv:v1.0
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              memory: 200Mi
+              cpu: "0"
+          ports:
+            - containerPort: 8080
+          env:
+            - name: MYSQL_HOST
+              value: "10.252.131.210"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-balance-svc
+  labels:
+    name: user-balance-svc
+spec:
+  #type: NodePort
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  clusterIP: None
+  selector:
+    name: user-server
