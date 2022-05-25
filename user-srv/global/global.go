@@ -16,10 +16,6 @@ import (
 	"gorm.io/gorm/schema"
 )
 
-const (
-	NacosFileName = "config.yaml"
-)
-
 var (
 	MysqlInfo   cfg.MysqlConfig
 	DB          *gorm.DB
