@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: douyin-feed
+  labels:
+    app: feed-server
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: feed-serve
+  template:
+    metadata:
+      labels:
+        app: feed-serve
+    spec:
+      containers:
+        - name: douyin-feed
+          image: ccr.ccs.tencentyun.com/douyin-test/feed-srv:v1.0
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              memory: 200Mi
+              cpu: "0"
+          ports:
+            - containerPort: 8080
+          env:
+            - name: MYSQL_HOST
+              value: "10.252.131.210"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: feed-balance-svc
+  labels:
+    name: feed-balance-svc
+spec:
+  #type: NodePort
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  clusterIP: None
+  selector:
+    name: feed-server
