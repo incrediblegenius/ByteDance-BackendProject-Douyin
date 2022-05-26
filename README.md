@@ -20,4 +20,4 @@
 
 然后差不多就可以了，服务暴露在 `http://localhost:8080` 上
 
-但其实关于数据库还没整完，后面会update自己的一个sql，mysql我没部署在docker上，因为我用mac m1开发的，mysql镜像和linux有些许不同，其实想要把mysql加到compose的其实也不难。
+但其实关于数据库还没整完，后面会update自己的一个sql（或者切到 `Gin/model/CreateTable`下自己建表，mysql我没部署在docker上，因为我用mac m1开发的，mysql镜像和linux有些许不同，其实想要把mysql加到compose的其实也不难。
