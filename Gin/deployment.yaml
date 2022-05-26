@@ -47,10 +47,8 @@ metadata:
   labels:
     name: gateway-balance-svc
 spec:
-  #type: NodePort
   ports:
   - port: 8080
-    protocol: TCP
     targetPort: 8080
   selector:
     app: gateway-gin

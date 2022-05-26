@@ -16,6 +16,13 @@ import (
 func Publish(ctx *gin.Context) {
 	token := ctx.PostForm("token")
 	data, err := ctx.FormFile("data")
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"status_code": -1,
+			"status_msg":  err.Error(),
+		})
+		return
+	}
 	title := ctx.Query("title")
 	f, err := data.Open()
 	if err != nil {
@@ -26,6 +33,13 @@ func Publish(ctx *gin.Context) {
 		return
 	}
 	defer f.Close()
+	if data.Size == 0 {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"status_code": -1,
+			"status_msg":  "file is empty",
+		})
+		return
+	}
 	buf := make([]byte, data.Size)
 	_, err = f.Read(buf)
 	if err != nil {

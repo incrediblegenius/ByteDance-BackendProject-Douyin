@@ -63,7 +63,7 @@ services:
       - douyin-net
 
   gateway:
-    image: "ccr.ccs.tencentyun.com/douyin-test/gateway-gin:v1.0"
+    image: "ccr.ccs.tencentyun.com/douyin-test/gateway-gin:v1.2"
     ports:
       - "8080:8080"
     networks:
