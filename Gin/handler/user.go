@@ -21,7 +21,7 @@ func Register(ctx *gin.Context) {
 		return
 	}
 	var rsp *proto.DouyinUserRegisterResponse
-	UserSrv := global.ConnMap[global.ServerConfig.SrvServerInfo.UserSrv]
+	UserSrv := global.ConnMap["user_srv"]
 	rsp, _ = UserSrv.Register(context.Background(), &proto.DouyinUserRegisterRequest{
 		Username: username,
 		Password: password,
@@ -54,7 +54,7 @@ func Login(ctx *gin.Context) {
 		return
 	}
 	var rsp *proto.DouyinUserRegisterResponse
-	UserSrv := global.ConnMap[global.ServerConfig.SrvServerInfo.UserSrv]
+	UserSrv := global.ConnMap["user_srv"]
 
 	rsp, _ = UserSrv.Login(context.Background(), &proto.DouyinUserRegisterRequest{
 		Username: username,
@@ -87,7 +87,7 @@ func GetUserInfo(ctx *gin.Context) {
 		})
 		return
 	}
-	UserSrv := global.ConnMap[global.ServerConfig.SrvServerInfo.UserSrv]
+	UserSrv := global.ConnMap["user_srv"]
 	rsp, err := UserSrv.GetUserById(context.Background(), &proto.IdRequest{
 		Id:        int64(id),
 		Token:     token,

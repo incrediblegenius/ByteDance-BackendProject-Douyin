@@ -20,7 +20,7 @@ func RelationAction(ctx *gin.Context) {
 	tuid, _ := strconv.Atoi(to_user_id)
 	ac, _ := strconv.Atoi(action_type)
 
-	RelationSrv := global.ConnMap[global.ServerConfig.SrvServerInfo.RelationSrv]
+	RelationSrv := global.ConnMap["relation_srv"]
 	rsp, err := RelationSrv.RelationAction(context.Background(), &proto.DouyinRelationActionRequest{
 		UserId:     int64(uid),
 		Token:      token,
@@ -49,7 +49,7 @@ func FollowList(ctx *gin.Context) {
 
 	uid, _ := strconv.Atoi(user_id)
 
-	RelationSrv := global.ConnMap[global.ServerConfig.SrvServerInfo.RelationSrv]
+	RelationSrv := global.ConnMap["relation_srv"]
 	rsp, err := RelationSrv.RelationFollowList(context.Background(), &proto.DouyinRelationFollowListRequest{
 		UserId: int64(uid),
 		Token:  token,
@@ -76,7 +76,7 @@ func FollowerList(ctx *gin.Context) {
 
 	uid, _ := strconv.Atoi(user_id)
 
-	RelationSrv := global.ConnMap[global.ServerConfig.SrvServerInfo.RelationSrv]
+	RelationSrv := global.ConnMap["relation_srv"]
 	rsp, err := RelationSrv.RelationFollowerList(context.Background(), &proto.DouyinRelationFollowerListRequest{
 		UserId: int64(uid),
 		Token:  token,

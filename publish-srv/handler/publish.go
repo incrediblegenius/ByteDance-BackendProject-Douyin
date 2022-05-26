@@ -7,6 +7,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io/ioutil"
+	"os"
 )
 
 type Server struct {
@@ -22,13 +24,19 @@ func (s *Server) PublishAction(ctx context.Context, req *proto.DouyinPublishActi
 		}, nil
 	}
 	filename := req.VideoName
+	err = SaveVideoAndCover(req.Content, filename)
+	if err != nil {
+		return &proto.DouyinPublishActionResponse{
+			StatusCode: -1,
+			StatusMsg:  "视频保存失败",
+		}, nil
+	}
 
 	id := int(claim.Id)
-
 	video := &model.Video{
 		AuthorID: id,
-		PlayUrl:  fmt.Sprintf("http://%s:%d/videos/%s.mp4", global.ServerConfig.StaticInfo.Host, global.ServerConfig.StaticInfo.Port, filename),
-		CoverUrl: fmt.Sprintf("http://%s:%d/covers/%s.png", global.ServerConfig.StaticInfo.Host, global.ServerConfig.StaticInfo.Port, filename),
+		PlayUrl:  fmt.Sprintf("%s/videos/%s.mp4", global.OssUrl, filename),
+		CoverUrl: fmt.Sprintf("%s/covers/%s_0.jpg", global.OssUrl, filename),
 		Title:    req.Title,
 	}
 	result := global.DB.Create(&video)
@@ -130,4 +138,26 @@ func GetUserById(req *Request) (*proto.User, error) {
 	}
 
 	return ans, nil
+}
+
+func SaveVideoAndCover(data []byte, filename string) error {
+	vkey := fmt.Sprintf("/videos/%s.mp4", filename)
+	err := ioutil.WriteFile(fmt.Sprintf("%s/%s.mp4", global.TempDir, filename), data, 0644)
+	if err != nil {
+		fmt.Println("write file error:", err)
+		return err
+	}
+
+	go func(filename string) {
+		_, _, err = global.OssClient.Object.Upload(
+			context.Background(), vkey, fmt.Sprintf("%s/%s.mp4", global.TempDir, filename), nil,
+		)
+		if err != nil {
+			fmt.Println("upload video error:", err)
+			panic(err)
+		}
+		defer os.Remove(fmt.Sprintf("%s/%s.mp4", global.TempDir, filename))
+	}(filename)
+
+	return nil
 }

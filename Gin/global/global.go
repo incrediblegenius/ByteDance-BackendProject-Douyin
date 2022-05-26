@@ -1,127 +1,114 @@
 package global
 
 import (
-	"Douyin/cfg"
 	"Douyin/proto"
-	"encoding/json"
+	"context"
 	"fmt"
 
-	"github.com/nacos-group/nacos-sdk-go/clients"
-	"github.com/nacos-group/nacos-sdk-go/clients/config_client"
-	"github.com/nacos-group/nacos-sdk-go/clients/naming_client"
-	"github.com/nacos-group/nacos-sdk-go/common/constant"
-	"github.com/nacos-group/nacos-sdk-go/vo"
-	"github.com/spf13/viper"
-)
-
-const (
-	NacosFileName = "config.yaml"
+	"github.com/namsral/flag"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 var (
-	ServerConfig cfg.ServerConfig
-	NacosConfig  cfg.NacosConfig
-
-	NamingClient naming_client.INamingClient
-	ConfigClient config_client.IConfigClient
-
-	ConnMap = make(map[string]proto.ServerClient)
+	ConnMap         = make(map[string]proto.ServerClient)
+	ServicePort     int
+	userService     string
+	relationService string
+	feedService     string
+	commentService  string
+	favoriteService string
+	publishService  string
 )
 
-func init() {
-	InitNacos()
+func InitParse() {
+	flag.IntVar(&ServicePort, "service_port", 8080, "service port")
+	flag.StringVar(&userService, "user_service", "user-balance-svc", "headless-service of user")
+	flag.StringVar(&relationService, "relation_service", "relation-balance-svc", "headless-service of relation")
+	flag.StringVar(&feedService, "feed_service", "feed-balance-svc", "headless-service of feed")
+	flag.StringVar(&commentService, "comment_service", "comment-balance-svc", "headless-service of comment")
+	flag.StringVar(&favoriteService, "favorite_service", "favorite-balance-svc", "headless-service of favorite")
+	flag.StringVar(&publishService, "publish_service", "publish-balance-svc", "headless-service of publish")
+	flag.Parse()
 }
 
-func InitNacos() {
-	v := viper.New()
-	v.SetConfigFile(NacosFileName)
-	if err := v.ReadInConfig(); err != nil {
-		panic(err)
-	}
-	if err := v.Unmarshal(&NacosConfig); err != nil {
-		panic(err)
-	}
-	sc := []constant.ServerConfig{
-		{
-			IpAddr: NacosConfig.Host,
-			Port:   NacosConfig.Port,
-		},
-	}
-	cc := constant.ClientConfig{
-		NamespaceId:         NacosConfig.Namespace,
-		TimeoutMs:           5000,
-		NotLoadCacheAtStart: true,
-		LogDir:              "nacos/log",
-		CacheDir:            "nacos/cache",
-		LogLevel:            "warn",
-	}
+func InitSrvClient() {
+	var conn *grpc.ClientConn
 	var err error
-	ConfigClient, err = clients.NewConfigClient(
-		vo.NacosClientParam{
-			ClientConfig:  &cc,
-			ServerConfigs: sc,
-		},
-	)
-	if err != nil {
+	if conn, err = grpc.DialContext(
+		context.Background(),
+		fmt.Sprintf("dns:///%s", userService),
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
+		// grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(1024*1024*10)),
+		grpc.WithBlock(),
+	); err != nil {
 		panic(err)
 	}
-	NamingClient, err = clients.NewNamingClient(
-		vo.NacosClientParam{
-			ClientConfig:  &cc,
-			ServerConfigs: sc,
-		},
-	)
-	if err != nil {
+	ConnMap["user_srv"] = proto.NewServerClient(conn)
+
+	if conn, err = grpc.DialContext(
+		context.Background(),
+		fmt.Sprintf("dns:///%s", relationService),
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
+		// grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(1024*1024*10)),
+		grpc.WithBlock(),
+	); err != nil {
 		panic(err)
 	}
-	content, err := ConfigClient.GetConfig(vo.ConfigParam{
-		DataId: NacosConfig.DataId,
-		Group:  NacosConfig.Group})
-	if err != nil {
+	ConnMap["relation_srv"] = proto.NewServerClient(conn)
+
+	if conn, err = grpc.DialContext(
+		context.Background(),
+		fmt.Sprintf("dns:///%s", feedService),
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
+		// grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(1024*1024*10)),
+		grpc.WithBlock(),
+	); err != nil {
 		panic(err)
 	}
-	err = json.Unmarshal([]byte(content), &ServerConfig)
-	if err != nil {
+	ConnMap["feed_srv"] = proto.NewServerClient(conn)
+
+	if conn, err = grpc.DialContext(
+		context.Background(),
+		fmt.Sprintf("dns:///%s", commentService),
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
+		// grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(1024*1024*10)),
+		grpc.WithBlock(),
+	); err != nil {
 		panic(err)
 	}
-	err = ConfigClient.ListenConfig(vo.ConfigParam{
-		DataId: NacosConfig.DataId,
-		Group:  NacosConfig.Group,
-		OnChange: func(namespace, group, dataId, data string) {
-			fmt.Println("group:" + group + ", dataId:" + dataId + "配置发生改变！")
-			err = json.Unmarshal([]byte(data), &ServerConfig)
-		},
-	})
-	if err != nil {
+	ConnMap["comment_srv"] = proto.NewServerClient(conn)
+
+	if conn, err = grpc.DialContext(
+		context.Background(),
+		fmt.Sprintf("dns:///%s", favoriteService),
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
+		// grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(1024*1024*10)),
+		grpc.WithBlock(),
+	); err != nil {
 		panic(err)
 	}
-	// fmt.Println(ServerConfig)
-	fmt.Println("成功从nacos读取配置")
+	ConnMap["favorite_srv"] = proto.NewServerClient(conn)
+
+	if conn, err = grpc.DialContext(
+		context.Background(),
+		fmt.Sprintf("dns:///%s", publishService),
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
+		grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(1024*1024*10)),
+		grpc.WithBlock(),
+	); err != nil {
+		panic(err)
+	}
+	ConnMap["publish_srv"] = proto.NewServerClient(conn)
+
 }
 
-// func UserSrvConn() proto.ServerClient {
-// 	// nacos 的负载均衡设置TODO
-// 	// instance, err := NamingClient.SelectOneHealthyInstance(vo.SelectOneHealthInstanceParam{
-// 	// 	ServiceName: ServerConfig.SrvServerInfo.UserSrv,
-// 	// 	GroupName:   NacosConfig.Group,
-// 	// })
-// 	// if err != nil {
-// 	// 	panic(err)
-// 	// }
+func init() {
 
-// 	conn, err := grpc.Dial(
-// 		nacosgrpc.Target(fmt.Sprintf("http://nacos:nacos@%s:%d/nacos", NacosConfig.Host, NacosConfig.Port),
-// 			ServerConfig.SrvServerInfo.UserSrv,
-// 			nacosgrpc.OptionNameSpaceID(NacosConfig.Namespace),
-// 			nacosgrpc.OptionGroupName(NacosConfig.Group)),
-// 		grpc.WithTransportCredentials(insecure.NewCredentials()),
-// 		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
-// 	)
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// 	UserSrv = proto.NewServerClient(conn)
-
-// 	return UserSrv
-
-// }
+}

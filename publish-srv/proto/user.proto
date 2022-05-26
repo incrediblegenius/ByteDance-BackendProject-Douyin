@@ -55,6 +55,7 @@ message douyin_publish_action_request{
   string token = 1 ; //用户鉴权token
   string video_name = 2 ; //发布的视频的名字
   string title = 3 ; //发布的视频的标题
+  bytes Content = 4 ; //发布的视频的内容
 }
 
 message douyin_publish_action_response{

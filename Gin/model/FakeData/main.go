@@ -1,7 +1,6 @@
 package main
 
 import (
-	"Douyin/global"
 	"Douyin/model"
 	"bufio"
 	"fmt"
@@ -63,11 +62,11 @@ func CreateVideos() {
 			ch <- struct{}{}
 			wg.Add(1)
 			go func(url string, cnt int) {
-				ID := rand.Intn(50) + 1
+				// ID := rand.Intn(50) + 1
 
-				urlSlice := strings.Split(url, "/")
-				tmp := urlSlice[len(urlSlice)-1]
-				filename := tmp[:len(tmp)-4]
+				// urlSlice := strings.Split(url, "/")
+				// tmp := urlSlice[len(urlSlice)-1]
+				// filename := tmp[:len(tmp)-4]
 				out, err := os.Create(fmt.Sprintf("./test%d.mp4", cnt))
 				if err != nil {
 					fmt.Println(err)
@@ -88,16 +87,16 @@ func CreateVideos() {
 				SaveVideoAndCover(cnt)
 				// mutex.Unlock()
 				defer resp.Body.Close()
-				result := DB.Create(&model.Video{
-					AuthorID: ID,
-					PlayUrl:  url,
-					CoverUrl: fmt.Sprintf("http://%s:%d/covers/%s.png", global.ServerConfig.StaticInfo.Host, global.ServerConfig.StaticInfo.Port, filename),
-				})
-				if result.Error != nil {
-					fmt.Println("插入失败")
-				}
-				os.Rename(fmt.Sprintf(Dir+"/test%d.png", cnt), global.ServerConfig.StaticInfo.StaticDir+"/covers/"+filename+".png")
-				os.Remove(fmt.Sprintf(Dir+"/test%d.mp4", cnt))
+				// result := DB.Create(&model.Video{
+				// 	AuthorID: ID,
+				// 	PlayUrl:  url,
+				// 	CoverUrl: fmt.Sprintf("http://%s:%d/covers/%s.png", global.ServerConfig.StaticInfo.Host, global.ServerConfig.StaticInfo.Port, filename),
+				// })
+				// if result.Error != nil {
+				// 	fmt.Println("插入失败")
+				// }
+				// os.Rename(fmt.Sprintf(Dir+"/test%d.png", cnt), global.ServerConfig.StaticInfo.StaticDir+"/covers/"+filename+".png")
+				// os.Remove(fmt.Sprintf(Dir+"/test%d.mp4", cnt))
 				<-ch
 				wg.Done()
 			}(url, cnt)
