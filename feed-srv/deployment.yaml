@@ -43,4 +43,4 @@ spec:
     targetPort: 8080
   clusterIP: None
   selector:
-    name: feed-server
+    app: feed-server

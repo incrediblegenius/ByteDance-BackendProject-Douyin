@@ -42,4 +42,4 @@ spec:
     protocol: TCP
     targetPort: 8080
   selector:
-    name: publish-server
+    app: publish-server
