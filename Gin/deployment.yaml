@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: douyin-publish
+  name: douyin-gateway
   labels:
-    app: publish-server
+    app: gateway-gin
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: publish-serve
+      app: gateway-gin
   template:
     metadata:
       labels:
-        app: publish-serve
+        app: gateway-gin
     spec:
       containers:
-        - name: douyin-publish
-          image: ccr.ccs.tencentyun.com/douyin-test/publish-srv:v1.0
+        - name: douyin-gateway
+          image: ccr.ccs.tencentyun.com/douyin-test/gateway-gin:v1.0
           imagePullPolicy: IfNotPresent
           resources:
             limits:
@@ -25,21 +25,31 @@ spec:
           ports:
             - containerPort: 8080
           env:
-            - name: MYSQL_HOST
-              value: "10.252.131.210"
+            - name: USER_SERVICE_RESOLVER
+              value: "dns:///user-balance-svc"
+            - name: RELATION_SERVICE_RESOLVER
+              value: "dns://relation-balance-svc"
+            - name: FEED_SERVICE_RESOLVER
+              value: "dns:///feed-balance-svc"
+            - name: FAVORITE_SERVICE_RESOLVER
+              value: "dns:///favorite-balance-svc"
+            - name: COMMENT_SERVICE_RESOLVER
+              value: "dns:///comment-balance-svc"
+            - name: PUBLISH_SERVICE_RESOLVER
+              value: "dns:///publish-balance-svc"
 
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: publish-balance-svc
-  labels:
-    name: publish-balance-svc
-spec:
-  #type: NodePort
-  ports:
-  - port: 8080
-    protocol: TCP
-    targetPort: 8080
-  selector:
-    name: publish-server
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: gateway-balance-svc
+#   labels:
+#     name: gateway-balance-svc
+# spec:
+#   #type: NodePort
+#   ports:
+#   - port: 8080
+#     protocol: TCP
+#     targetPort: 8080
+#   selector:
+#     name: gateway-server

@@ -8,11 +8,11 @@ spec:
   replicas: 3
   selector:
     matchLabels:
-      app: user-serve
+      app: user-server
   template:
     metadata:
       labels:
-        app: user-serve
+        app: user-server
     spec:
       containers:
         - name: douyin-user
@@ -36,11 +36,9 @@ metadata:
   labels:
     name: user-balance-svc
 spec:
-  #type: NodePort
+  clusterIP: None
   ports:
   - port: 8080
-    protocol: TCP
     targetPort: 8080
-  clusterIP: None
   selector:
-    name: user-server
+    app: user-server

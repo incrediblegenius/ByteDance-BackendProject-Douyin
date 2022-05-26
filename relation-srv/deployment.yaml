@@ -8,11 +8,11 @@ spec:
   replicas: 3
   selector:
     matchLabels:
-      app: relation-serve
+      app: relation-server
   template:
     metadata:
       labels:
-        app: relation-serve
+        app: relation-server
     spec:
       containers:
         - name: douyin-relation
@@ -39,8 +39,7 @@ spec:
   #type: NodePort
   ports:
   - port: 8080
-    protocol: TCP
     targetPort: 8080
   clusterIP: None
   selector:
-    name: relation-server
+    app: relation-server

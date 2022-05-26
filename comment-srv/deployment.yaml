@@ -8,11 +8,11 @@ spec:
   replicas: 3
   selector:
     matchLabels:
-      app: comment-serve
+      app: comment-server
   template:
     metadata:
       labels:
-        app: comment-serve
+        app: comment-server
     spec:
       containers:
         - name: douyin-comment
@@ -39,8 +39,7 @@ spec:
   #type: NodePort
   ports:
   - port: 8080
-    protocol: TCP
     targetPort: 8080
   clusterIP: None
   selector:
-    name: comment-server
+    app: comment-server

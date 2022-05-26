@@ -8,11 +8,11 @@ spec:
   replicas: 3
   selector:
     matchLabels:
-      app: feed-serve
+      app: feed-server
   template:
     metadata:
       labels:
-        app: feed-serve
+        app: feed-server
     spec:
       containers:
         - name: douyin-feed
@@ -39,8 +39,7 @@ spec:
   #type: NodePort
   ports:
   - port: 8080
-    protocol: TCP
     targetPort: 8080
   clusterIP: None
   selector:
-    name: feed-server
+    app: feed-server

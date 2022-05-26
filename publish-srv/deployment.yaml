@@ -8,11 +8,11 @@ spec:
   replicas: 3
   selector:
     matchLabels:
-      app: publish-serve
+      app: publish-server
   template:
     metadata:
       labels:
-        app: publish-serve
+        app: publish-server
     spec:
       containers:
         - name: douyin-publish
@@ -39,8 +39,7 @@ spec:
   #type: NodePort
   ports:
   - port: 8080
-    protocol: TCP
     targetPort: 8080
   clusterIP: None
   selector:
-    name: publish-server
+    app: publish-server
