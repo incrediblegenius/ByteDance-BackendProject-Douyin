@@ -3,6 +3,7 @@ package global
 import (
 	"Douyin/proto"
 	"context"
+	"fmt"
 
 	"github.com/namsral/flag"
 	"google.golang.org/grpc"
@@ -42,6 +43,12 @@ func InitSrvClient() {
 		favoriteService = localAddr + ":8085"
 		publishService = localAddr + ":8086"
 	}
+	fmt.Println(userService)
+	fmt.Println(relationService)
+	fmt.Println(feedService)
+	fmt.Println(commentService)
+	fmt.Println(favoriteService)
+	fmt.Println(publishService)
 	var conn *grpc.ClientConn
 	var err error
 	if conn, err = grpc.DialContext(
@@ -50,7 +57,7 @@ func InitSrvClient() {
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
 		// grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(1024*1024*10)),
-		grpc.WithBlock(),
+		// grpc.WithBlock(),
 	); err != nil {
 		panic(err)
 	}
@@ -62,7 +69,7 @@ func InitSrvClient() {
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
 		// grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(1024*1024*10)),
-		grpc.WithBlock(),
+		// grpc.WithBlock(),
 	); err != nil {
 		panic(err)
 	}
@@ -74,7 +81,7 @@ func InitSrvClient() {
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
 		// grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(1024*1024*10)),
-		grpc.WithBlock(),
+		// grpc.WithBlock(),
 	); err != nil {
 		panic(err)
 	}
@@ -86,7 +93,7 @@ func InitSrvClient() {
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
 		// grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(1024*1024*10)),
-		grpc.WithBlock(),
+		// grpc.WithBlock(),
 	); err != nil {
 		panic(err)
 	}
@@ -98,7 +105,7 @@ func InitSrvClient() {
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
 		// grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(1024*1024*10)),
-		grpc.WithBlock(),
+		// grpc.WithBlock(),
 	); err != nil {
 		panic(err)
 	}
@@ -111,7 +118,7 @@ func InitSrvClient() {
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
 		grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(1024*1024*10)),
-		grpc.WithBlock(),
+		// grpc.WithBlock(),
 	); err != nil {
 		panic(err)
 	}

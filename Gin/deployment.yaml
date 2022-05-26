@@ -16,8 +16,8 @@ spec:
     spec:
       containers:
         - name: douyin-gateway
-          image: ccr.ccs.tencentyun.com/douyin-test/gateway-gin:v1.0
-          imagePullPolicy: IfNotPresent
+          image: ccr.ccs.tencentyun.com/douyin-test/gateway-gin:v1.1
+          imagePullPolicy: Always
           resources:
             limits:
               memory: 200Mi
@@ -26,30 +26,31 @@ spec:
             - containerPort: 8080
           env:
             - name: USER_SERVICE_RESOLVER
-              value: "dns:///user-balance-svc"
+              value: "dns:///user-balance-svc:8080"
             - name: RELATION_SERVICE_RESOLVER
-              value: "dns://relation-balance-svc"
+              value: "dns:///relation-balance-svc:8080"
             - name: FEED_SERVICE_RESOLVER
-              value: "dns:///feed-balance-svc"
+              value: "dns:///feed-balance-svc:8080"
             - name: FAVORITE_SERVICE_RESOLVER
-              value: "dns:///favorite-balance-svc"
+              value: "dns:///favorite-balance-svc:8080"
             - name: COMMENT_SERVICE_RESOLVER
-              value: "dns:///comment-balance-svc"
+              value: "dns:///comment-balance-svc:8080"
             - name: PUBLISH_SERVICE_RESOLVER
-              value: "dns:///publish-balance-svc"
+              value: "dns:///publish-balance-svc:8080"
 
-# ---
-# apiVersion: v1
-# kind: Service
-# metadata:
-#   name: gateway-balance-svc
-#   labels:
-#     name: gateway-balance-svc
-# spec:
-#   #type: NodePort
-#   ports:
-#   - port: 8080
-#     protocol: TCP
-#     targetPort: 8080
-#   selector:
-#     name: gateway-server
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway-balance-svc
+  labels:
+    name: gateway-balance-svc
+spec:
+  #type: NodePort
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: gateway-gin
