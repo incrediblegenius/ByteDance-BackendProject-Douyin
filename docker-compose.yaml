@@ -1,0 +1,82 @@
+version: "3"
+
+services:
+  user-srv:
+    image: "ccr.ccs.tencentyun.com/douyin-test/user-srv:v1.0"
+    ports:
+      - "8081:8080"
+    environment:
+      - MYSQL_HOST=10.252.131.210
+      - MYSQL_PORT=3306
+    networks:
+      - douyin-net
+
+  relation-srv:
+    image: "ccr.ccs.tencentyun.com/douyin-test/relation-srv:v1.0"
+    ports:
+      - "8082:8080"
+    environment:
+      - MYSQL_HOST=10.252.131.210
+      - MYSQL_PORT=3306
+    networks:
+      - douyin-net
+    
+  feed-srv:
+    image: "ccr.ccs.tencentyun.com/douyin-test/feed-srv:v1.0"
+    ports:
+      - "8083:8080"
+    environment:
+      - MYSQL_HOST=10.252.131.210
+      - MYSQL_PORT=3306
+    networks:
+      - douyin-net
+
+  comment-srv:
+    image: "ccr.ccs.tencentyun.com/douyin-test/comment-srv:v1.0"
+    ports:
+      - "8084:8080"
+    environment:
+      - MYSQL_HOST=10.252.131.210
+      - MYSQL_PORT=3306
+    networks:
+      - douyin-net
+
+
+  favorite-srv:
+    image: "ccr.ccs.tencentyun.com/douyin-test/favorite-srv:v1.0"
+    ports:
+      - "8085:8080"
+    environment:
+      - MYSQL_HOST=10.252.131.210
+      - MYSQL_PORT=3306
+    networks:
+      - douyin-net
+
+  publish-srv:
+    image: "ccr.ccs.tencentyun.com/douyin-test/publish-srv:v1.0"
+    ports:
+      - "8086:8080"
+    environment:
+      - MYSQL_HOST=10.252.131.210
+      - MYSQL_PORT=3306
+    networks:
+      - douyin-net
+
+  gateway:
+    image: "ccr.ccs.tencentyun.com/douyin-test/gateway-gin:v1.0"
+    ports:
+      - "8080:8080"
+    networks:
+      - douyin-net
+    environment:
+      - USER_SERVICE_RESOLVER=user-srv:8080
+      - RELATION_SERVICE_RESOLVER=user-srv:8080
+      - FEED_SERVICE_RESOLVER=feed-srv:8080
+      - COMMENT_SERVICE_RESOLVER=comment-srv:8080
+      - FAVORITE_SERVICE_RESOLVER=favorite-srv:8080
+      - PUBLISH_SERVICE_RESOLVER=publish-srv:8080
+networks:
+  douyin-net:
+    external: true
+      
+

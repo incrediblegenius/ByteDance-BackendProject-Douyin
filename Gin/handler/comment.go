@@ -24,7 +24,7 @@ func CommentAction(ctx *gin.Context) {
 	if ac == 2 {
 		cid, _ = strconv.Atoi(comment_id)
 	}
-	userSrv := global.ConnMap["user_srv"]
+	userSrv := global.ConnMap["comment_srv"]
 	rsp, err := userSrv.CommentAction(context.Background(), &proto.DouyinCommentActionRequest{
 		UserId:      int64(uid),
 		Token:       token,

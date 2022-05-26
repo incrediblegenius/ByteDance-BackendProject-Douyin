@@ -3,7 +3,6 @@ package global
 import (
 	"Douyin/proto"
 	"context"
-	"fmt"
 
 	"github.com/namsral/flag"
 	"google.golang.org/grpc"
@@ -19,25 +18,35 @@ var (
 	commentService  string
 	favoriteService string
 	publishService  string
+	localAddr       string
 )
 
 func InitParse() {
 	flag.IntVar(&ServicePort, "service_port", 8080, "service port")
-	flag.StringVar(&userService, "user_service", "user-balance-svc", "headless-service of user")
-	flag.StringVar(&relationService, "relation_service", "relation-balance-svc", "headless-service of relation")
-	flag.StringVar(&feedService, "feed_service", "feed-balance-svc", "headless-service of feed")
-	flag.StringVar(&commentService, "comment_service", "comment-balance-svc", "headless-service of comment")
-	flag.StringVar(&favoriteService, "favorite_service", "favorite-balance-svc", "headless-service of favorite")
-	flag.StringVar(&publishService, "publish_service", "publish-balance-svc", "headless-service of publish")
+	flag.StringVar(&userService, "user_service_resolver", "127.0.0.1:8081", "user service resolver")
+	flag.StringVar(&relationService, "relation_service_resolver", "127.0.0.1:8082", "relation service resolver")
+	flag.StringVar(&feedService, "feed_service_resolver", "127.0.0.1:8083", "feed service resolver")
+	flag.StringVar(&commentService, "comment_service_resolver", "127.0.0.1:8084", "comment service resolver")
+	flag.StringVar(&favoriteService, "favorite_service_resolver", "127.0.0.1:8085", "favorite service resolver")
+	flag.StringVar(&publishService, "publish_service_resolver", "127.0.0.1:8086", "publish service resolver")
+	flag.StringVar(&localAddr, "local_addr", "", "local addr")
 	flag.Parse()
 }
 
 func InitSrvClient() {
+	if localAddr != "" {
+		userService = localAddr + ":8081"
+		relationService = localAddr + ":8082"
+		feedService = localAddr + ":8083"
+		commentService = localAddr + ":8084"
+		favoriteService = localAddr + ":8085"
+		publishService = localAddr + ":8086"
+	}
 	var conn *grpc.ClientConn
 	var err error
 	if conn, err = grpc.DialContext(
 		context.Background(),
-		fmt.Sprintf("dns:///%s", userService),
+		userService,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
 		// grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(1024*1024*10)),
@@ -49,7 +58,7 @@ func InitSrvClient() {
 
 	if conn, err = grpc.DialContext(
 		context.Background(),
-		fmt.Sprintf("dns:///%s", relationService),
+		relationService,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
 		// grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(1024*1024*10)),
@@ -61,7 +70,7 @@ func InitSrvClient() {
 
 	if conn, err = grpc.DialContext(
 		context.Background(),
-		fmt.Sprintf("dns:///%s", feedService),
+		feedService,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
 		// grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(1024*1024*10)),
@@ -73,7 +82,7 @@ func InitSrvClient() {
 
 	if conn, err = grpc.DialContext(
 		context.Background(),
-		fmt.Sprintf("dns:///%s", commentService),
+		commentService,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
 		// grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(1024*1024*10)),
@@ -85,7 +94,7 @@ func InitSrvClient() {
 
 	if conn, err = grpc.DialContext(
 		context.Background(),
-		fmt.Sprintf("dns:///%s", favoriteService),
+		favoriteService,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
 		// grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(1024*1024*10)),
@@ -97,7 +106,8 @@ func InitSrvClient() {
 
 	if conn, err = grpc.DialContext(
 		context.Background(),
-		fmt.Sprintf("dns:///%s", publishService),
+		publishService,
+		// "127.0.0.1:8080",
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
 		grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(1024*1024*10)),
@@ -110,5 +120,6 @@ func InitSrvClient() {
 }
 
 func init() {
-
+	InitParse()
+	InitSrvClient()
 }

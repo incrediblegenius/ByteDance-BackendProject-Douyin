@@ -18,29 +18,29 @@ func InitRouter(Router *gin.Engine) {
 		r.POST("/login/", handler.Login)
 		r.GET("/", handler.GetUserInfo)
 	}
-	// r = Router.Group("/douyin")
-	// {
-	// 	r.GET("/feed", handler.GetFeed)
-	// }
-	// r := Router.Group("/douyin/publish")
-	// {
-	// 	r.POST("/action/", handler.Publish)
-	// 	r.GET("/list/", handler.PublishList)
-	// }
-	// r = Router.Group("/douyin/favorite")
-	// {
-	// 	r.POST("/action/", handler.FavoriteAction)
-	// 	r.GET("/list/", handler.FavoriteList)
-	// }
-	// r = Router.Group("/douyin/comment")
-	// {
-	// 	r.POST("/action/", handler.CommentAction)
-	// 	r.GET("/list/", handler.CommentList)
-	// }
-	// r = Router.Group("/douyin/relation")
-	// {
-	// 	r.POST("/action/", handler.RelationAction)
-	// 	r.GET("/follow/list/", handler.FollowList)
-	// 	r.GET("/follower/list/", handler.FollowerList)
-	// }
+	r = Router.Group("/douyin")
+	{
+		r.GET("/feed", handler.GetFeed)
+	}
+	r = Router.Group("/douyin/publish")
+	{
+		r.POST("/action/", handler.Publish)
+		r.GET("/list/", handler.PublishList)
+	}
+	r = Router.Group("/douyin/favorite")
+	{
+		r.POST("/action/", handler.FavoriteAction)
+		r.GET("/list/", handler.FavoriteList)
+	}
+	r = Router.Group("/douyin/comment")
+	{
+		r.POST("/action/", handler.CommentAction)
+		r.GET("/list/", handler.CommentList)
+	}
+	r = Router.Group("/douyin/relation")
+	{
+		r.POST("/action/", handler.RelationAction)
+		r.GET("/follow/list/", handler.FollowList)
+		r.GET("/follower/list/", handler.FollowerList)
+	}
 }
