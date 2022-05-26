@@ -3,7 +3,7 @@
 
 在这个分支上完成了docker-compose中的改造。
 
-## 默认大家都有docker环境）
+## 默认大家都有docker环境 **
 
 首先git clone下来后切换分支到docker-compose：
 `git checkout docker-compose`
