@@ -3,6 +3,8 @@
 
 在这个分支上完成了服务在k8s中的改造。使用原生dns:///来做的grpc的负载均衡，ingress+nginx的暴露服务的负载均衡。
 
+### TODO ： 加入istio做服务治理和和grpc负载均衡
+
 ## 默认大家都有docker环境，都有一个k8s的cluster，都会kubectrl **
 
 首先git clone下来后切换分支到k8s：
