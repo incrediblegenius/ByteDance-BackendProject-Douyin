@@ -13,6 +13,7 @@ spec:
     metadata:
       labels:
         app: comment-server
+        version: v1
     spec:
       containers:
         - name: douyin-comment
@@ -26,7 +27,9 @@ spec:
             - containerPort: 8080
           env:
             - name: MYSQL_HOST
-              value: "10.252.131.210"
+              value: "113.54.157.200"
+            - name: MYSQL_PORT
+              value: "3307"
 
 ---
 apiVersion: v1
@@ -38,7 +41,8 @@ metadata:
 spec:
   #type: NodePort
   ports:
-  - port: 8080
+  - name: grpc-comment
+    port: 8080
     targetPort: 8080
   clusterIP: None
   selector:

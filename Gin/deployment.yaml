@@ -13,10 +13,11 @@ spec:
     metadata:
       labels:
         app: gateway-gin
+        version: v1
     spec:
       containers:
         - name: douyin-gateway
-          image: ccr.ccs.tencentyun.com/douyin-test/gateway-gin:v1.1
+          image: ccr.ccs.tencentyun.com/douyin-test/gateway-gin:v1.2
           imagePullPolicy: Always
           resources:
             limits:
@@ -48,7 +49,8 @@ metadata:
     name: gateway-balance-svc
 spec:
   ports:
-  - port: 8080
+  - name: http-gin
+    port: 8080
     targetPort: 8080
   selector:
     app: gateway-gin
