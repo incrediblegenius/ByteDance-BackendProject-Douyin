@@ -2,6 +2,7 @@ package global
 
 import (
 	"Douyin/proto"
+	_ "Douyin/resolver"
 	"context"
 	"fmt"
 
@@ -20,17 +21,19 @@ var (
 	favoriteService string
 	publishService  string
 	localAddr       string
+	connetTimeout   int
 )
 
 func InitParse() {
 	flag.IntVar(&ServicePort, "service_port", 8080, "service port")
-	flag.StringVar(&userService, "user_service_resolver", "127.0.0.1:8081", "user service resolver")
+	flag.StringVar(&userService, "user_service_resolver", "dnsss:///user-balance-svc:8080", "user service resolver")
 	flag.StringVar(&relationService, "relation_service_resolver", "127.0.0.1:8082", "relation service resolver")
 	flag.StringVar(&feedService, "feed_service_resolver", "127.0.0.1:8083", "feed service resolver")
 	flag.StringVar(&commentService, "comment_service_resolver", "127.0.0.1:8084", "comment service resolver")
 	flag.StringVar(&favoriteService, "favorite_service_resolver", "127.0.0.1:8085", "favorite service resolver")
 	flag.StringVar(&publishService, "publish_service_resolver", "127.0.0.1:8086", "publish service resolver")
 	flag.StringVar(&localAddr, "local_addr", "", "local addr")
+	flag.IntVar(&connetTimeout, "connet_timeout", 10, "connet timeout")
 	flag.Parse()
 }
 
@@ -51,6 +54,10 @@ func InitSrvClient() {
 	fmt.Println(publishService)
 	var conn *grpc.ClientConn
 	var err error
+
+	// ctx, cancel := context.WithTimeout(context.Background(), time.Duration(connetTimeout)*time.Second)
+	// defer cancel()
+
 	if conn, err = grpc.DialContext(
 		context.Background(),
 		userService,

@@ -5,7 +5,7 @@ metadata:
   labels:
     app: gateway-gin
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: gateway-gin
@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: douyin-gateway
-          image: ccr.ccs.tencentyun.com/douyin-test/gateway-gin:v1.2
+          image: ccr.ccs.tencentyun.com/douyin-test/gateway-gin:v2.0
           imagePullPolicy: Always
           resources:
             limits:
@@ -27,17 +27,17 @@ spec:
             - containerPort: 8080
           env:
             - name: USER_SERVICE_RESOLVER
-              value: "dns:///user-balance-svc:8080"
+              value: "dnsss:///user-balance-svc:8080"
             - name: RELATION_SERVICE_RESOLVER
-              value: "dns:///relation-balance-svc:8080"
+              value: "dnsss:///relation-balance-svc:8080"
             - name: FEED_SERVICE_RESOLVER
-              value: "dns:///feed-balance-svc:8080"
+              value: "dnsss:///feed-balance-svc:8080"
             - name: FAVORITE_SERVICE_RESOLVER
-              value: "dns:///favorite-balance-svc:8080"
+              value: "dnsss:///favorite-balance-svc:8080"
             - name: COMMENT_SERVICE_RESOLVER
-              value: "dns:///comment-balance-svc:8080"
+              value: "dnsss:///comment-balance-svc:8080"
             - name: PUBLISH_SERVICE_RESOLVER
-              value: "dns:///publish-balance-svc:8080"
+              value: "dnsss:///publish-balance-svc:8080"
 
 ---
 
