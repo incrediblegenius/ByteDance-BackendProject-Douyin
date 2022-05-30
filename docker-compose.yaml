@@ -10,6 +10,7 @@ services:
       - MYSQL_PORT=3307
     networks:
       - douyin-net
+    restart: always
 
   relation-srv:
     image: "ccr.ccs.tencentyun.com/douyin-test/relation-srv:v1.0"
@@ -20,9 +21,10 @@ services:
       - MYSQL_PORT=3307
     networks:
       - douyin-net
+    restart: always
     
   feed-srv:
-    image: "ccr.ccs.tencentyun.com/douyin-test/feed-srv:v1.0"
+    image: "ccr.ccs.tencentyun.com/douyin-test/feed-srv:v2.0"
     ports:
       - "8083:8080"
     environment:
@@ -30,6 +32,7 @@ services:
       - MYSQL_PORT=3307
     networks:
       - douyin-net
+    restart: always
 
   comment-srv:
     image: "ccr.ccs.tencentyun.com/douyin-test/comment-srv:v1.0"
@@ -40,7 +43,7 @@ services:
       - MYSQL_PORT=3307
     networks:
       - douyin-net
-
+    restart: always
 
   favorite-srv:
     image: "ccr.ccs.tencentyun.com/douyin-test/favorite-srv:v1.0"
@@ -51,6 +54,7 @@ services:
       - MYSQL_PORT=3307
     networks:
       - douyin-net
+    restart: always
 
   publish-srv:
     image: "ccr.ccs.tencentyun.com/douyin-test/publish-srv:v1.0"
@@ -61,9 +65,10 @@ services:
       - MYSQL_PORT=3307
     networks:
       - douyin-net
+    restart: always
 
   gateway:
-    image: "ccr.ccs.tencentyun.com/douyin-test/gateway-gin:v1.2"
+    image: "ccr.ccs.tencentyun.com/douyin-test/gateway-gin:v2.0"
     ports:
       - "8080:8080"
     networks:
@@ -75,6 +80,8 @@ services:
       - COMMENT_SERVICE_RESOLVER=comment-srv:8080
       - FAVORITE_SERVICE_RESOLVER=favorite-srv:8080
       - PUBLISH_SERVICE_RESOLVER=publish-srv:8080
+    restart: always
+
 networks:
   douyin-net:
     external: true
