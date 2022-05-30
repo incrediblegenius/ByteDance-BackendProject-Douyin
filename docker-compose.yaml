@@ -68,7 +68,7 @@ services:
     restart: always
 
   gateway:
-    image: "ccr.ccs.tencentyun.com/douyin-test/gateway-gin:v2.0"
+    image: "ccr.ccs.tencentyun.com/douyin-test/gateway-gin:v2.1"
     ports:
       - "8080:8080"
     networks:

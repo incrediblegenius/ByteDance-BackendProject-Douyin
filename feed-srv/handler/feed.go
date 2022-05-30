@@ -33,7 +33,7 @@ func (s *Server) GetUserFeed(ctx context.Context, req *proto.DouyinFeedRequest) 
 	}
 
 	var videos []model.Video
-	result := global.DB.Limit(30).Order("update_time desc").Find(&videos, "update_time < ?", time.UnixMilli(reqtime))
+	result := global.DB.Limit(30).Order("add_time desc").Find(&videos, "add_time < ?", time.UnixMilli(reqtime))
 	if result.Error != nil {
 		// fmt.Println("查询失败")
 		return &proto.DouyinFeedResponse{

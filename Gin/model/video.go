@@ -4,7 +4,7 @@ import "time"
 
 type Video struct {
 	BaseModel
-	UpdatedAt     time.Time `gorm:"column:update_time;not null;index:idx_update" `
+	CreatedAt     time.Time `gorm:"column:add_time;not null;index:idx_add" `
 	Author        User      `gorm:"foreignkey:AuthorID"`
 	AuthorID      int       `gorm:"index:idx_authorid;not null"`
 	PlayUrl       string    `gorm:"type:varchar(255);not null"`
