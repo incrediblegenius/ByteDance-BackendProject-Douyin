@@ -53,9 +53,9 @@ func (s *Server) GetUserFeed(ctx context.Context, req *proto.DouyinFeedRequest) 
 	var nextTime int64
 	if len(videos) > 0 {
 		sort.Slice(videos, func(i, j int) bool {
-			return videos[i].UpdatedAt.UnixMilli() > videos[j].UpdatedAt.UnixMilli()
+			return videos[i].CreatedAt.UnixMilli() > videos[j].CreatedAt.UnixMilli()
 		})
-		nextTime = videos[len(videos)-1].UpdatedAt.UnixMilli()
+		nextTime = videos[len(videos)-1].CreatedAt.UnixMilli()
 	} else {
 		nextTime = time.Now().UnixMilli()
 	}

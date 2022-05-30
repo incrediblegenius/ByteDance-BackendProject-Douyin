@@ -23,7 +23,7 @@ func Publish(ctx *gin.Context) {
 		})
 		return
 	}
-	title := ctx.Query("title")
+	title := ctx.PostForm("title")
 	f, err := data.Open()
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{

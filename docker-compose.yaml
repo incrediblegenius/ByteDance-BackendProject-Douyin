@@ -24,7 +24,7 @@ services:
     restart: always
     
   feed-srv:
-    image: "ccr.ccs.tencentyun.com/douyin-test/feed-srv:v2.0"
+    image: "ccr.ccs.tencentyun.com/douyin-test/feed-srv:v2.2"
     ports:
       - "8083:8080"
     environment:
