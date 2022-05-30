@@ -185,6 +185,15 @@ func CountComments() {
 		DB.Model(&v).Update("comment_count", cnt)
 	}
 }
+func CountFavorite() {
+	videos := []model.Video{}
+	DB.Find(&videos)
+	for _, v := range videos {
+		var cnt int64
+		DB.Model(&model.FavoriteVideo{}).Where("video_id = ?", v.ID).Count(&cnt)
+		DB.Model(&v).Update("favorite_count", cnt)
+	}
+}
 
 func main() {
 	// CreateVideos()

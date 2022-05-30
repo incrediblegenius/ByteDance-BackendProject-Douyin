@@ -27,9 +27,13 @@ func (s *Server) GetUserFeed(ctx context.Context, req *proto.DouyinFeedRequest) 
 			uid = int(claim.Id)
 		}
 	}
+	reqtime := req.LatestTime
+	if reqtime == 0 {
+		reqtime = time.Now().UnixMilli()
+	}
 
 	var videos []model.Video
-	result := global.DB.Limit(30).Order("update_time desc").Find(&videos, "update_time < ?", time.UnixMilli(req.LatestTime))
+	result := global.DB.Limit(30).Order("update_time desc").Find(&videos, "update_time < ?", time.UnixMilli(reqtime))
 	if result.Error != nil {
 		// fmt.Println("查询失败")
 		return &proto.DouyinFeedResponse{
@@ -77,6 +81,7 @@ func (s *Server) GetUserFeed(ctx context.Context, req *proto.DouyinFeedRequest) 
 			FavoriteCount: int64(v.FavoriteCount),
 			CommentCount:  int64(v.CommentCount),
 			IsFavorite:    flag, // TODO 判断这个视频是否自己喜欢
+			Title:         v.Title,
 		})
 	}
 
