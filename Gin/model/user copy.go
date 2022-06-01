@@ -18,5 +18,5 @@ type Usertest struct {
 	UserName  string      `gorm:"index:idx_username,unique;type:varchar(40);not null"`
 	Password  string      `gorm:"type:varchar(40);not null"`
 	Following *[]Usertest `gorm:"many2many:usertest_following;"`
-	Follower  *[]Usertest `gorm:"many2many:user_follower;"`
+	Follower  *[]Usertest `gorm:"many2many:usertest_follower;"`
 }

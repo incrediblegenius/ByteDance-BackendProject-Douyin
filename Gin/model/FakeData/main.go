@@ -3,17 +3,20 @@ package main
 import (
 	"Douyin/model"
 	"bufio"
+	"context"
 	"fmt"
 	"io"
 	"log"
 	"math/rand"
 	"net/http"
+	"net/url"
 	"os"
 	"os/exec"
 	"strings"
 	"sync"
 	"time"
 
+	"github.com/tencentyun/cos-go-sdk-v5"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -25,11 +28,12 @@ const (
 )
 
 var (
-	DB *gorm.DB
+	DB        *gorm.DB
+	OssClient *cos.Client
 )
 
 func init() {
-	addr := "root:root@tcp(localhost:3306)/douyin_user?charset=utf8mb4&parseTime=True&loc=Local"
+	addr := "root:root@tcp(113.54.157.200:3307)/douyin_user?charset=utf8mb4&parseTime=True&loc=Local"
 	newLogger := logger.New(
 		log.New(os.Stdout, "\r\n", log.LstdFlags),
 		logger.Config{
@@ -45,6 +49,17 @@ func init() {
 		Logger: newLogger,
 	})
 	rand.Seed(time.Now().UnixMilli())
+	u, _ := url.Parse("https://doiuyin-1302721364.cos.ap-chengdu.myqcloud.com")
+	b := &cos.BaseURL{BucketURL: u}
+	OssClient = cos.NewClient(b, &http.Client{
+		Transport: &cos.AuthorizationTransport{
+			// 通过环境变量获取密钥
+			// 环境变量 SECRETID 表示用户的 SecretId，登录访问管理控制台查看密钥，https://console.cloud.tencent.com/cam/capi
+			SecretID: "AKIDAIC1cy62k7HDwQfhU4PWO32xhGgtvlOp",
+			// 环境变量 SECRETKEY 表示用户的 SecretKey，登录访问管理控制台查看密钥，https://console.cloud.tencent.com/cam/capi
+			SecretKey: "GI7lCPRIxPfjcIl14vZ3MTN4ZqsgI0Xs",
+		},
+	})
 }
 
 func CreateVideos() {
@@ -53,52 +68,54 @@ func CreateVideos() {
 	input := bufio.NewScanner(f)
 	cnt := 0
 
-	ch := make(chan struct{}, 10)
+	ch := make(chan struct{}, 30)
 	wg := &sync.WaitGroup{}
 	for input.Scan() {
-		if (cnt+2)%200 == 0 {
+		if (cnt+1)%11 == 0 {
 			// 并发下载，之后写（需要考虑文件io的并发）
 			url := input.Text()
 			ch <- struct{}{}
 			wg.Add(1)
 			go func(url string, cnt int) {
-				// ID := rand.Intn(50) + 1
+				ID := rand.Intn(50) + 1
 
-				// urlSlice := strings.Split(url, "/")
-				// tmp := urlSlice[len(urlSlice)-1]
-				// filename := tmp[:len(tmp)-4]
-				out, err := os.Create(fmt.Sprintf("./test%d.mp4", cnt))
+				urlSlice := strings.Split(url, "/")
+				tmp := urlSlice[len(urlSlice)-1]
+				filename := tmp[:len(tmp)-4]
+				out, err := os.Create(tmp)
 				if err != nil {
 					fmt.Println(err)
 					return
 				}
 				defer out.Close()
 				resp, err := http.Get(url)
-				if err != nil {
+				if err != nil || resp.StatusCode != 200 {
 					fmt.Println(err)
+					resp.Body.Close()
 					return
 				}
+				defer resp.Body.Close()
 				_, err = io.Copy(out, resp.Body)
 				if err != nil {
 					fmt.Println(err)
 					return
 				}
 				// mutex.Lock()
-				SaveVideoAndCover(cnt)
+				err = SaveVideoAndCover(filename)
 				// mutex.Unlock()
-				defer resp.Body.Close()
-				// result := DB.Create(&model.Video{
-				// 	AuthorID: ID,
-				// 	PlayUrl:  url,
-				// 	CoverUrl: fmt.Sprintf("http://%s:%d/covers/%s.png", global.ServerConfig.StaticInfo.Host, global.ServerConfig.StaticInfo.Port, filename),
-				// })
-				// if result.Error != nil {
-				// 	fmt.Println("插入失败")
-				// }
-				// os.Rename(fmt.Sprintf(Dir+"/test%d.png", cnt), global.ServerConfig.StaticInfo.StaticDir+"/covers/"+filename+".png")
-				// os.Remove(fmt.Sprintf(Dir+"/test%d.mp4", cnt))
+
+				if err == nil {
+					result := DB.Create(&model.Video{
+						AuthorID: ID,
+						PlayUrl:  url,
+						CoverUrl: fmt.Sprintf("https://doiuyin-1302721364.cos.ap-chengdu.myqcloud.com/covers/%s.png", filename),
+					})
+					if result.Error != nil {
+						fmt.Println("插入失败")
+					}
+				}
 				<-ch
-				wg.Done()
+				defer wg.Done()
 			}(url, cnt)
 		}
 		cnt++
@@ -109,20 +126,37 @@ func CreateVideos() {
 	// fmt.Println(len(vs))
 }
 
-func SaveVideoAndCover(cnt int) error {
+func SaveVideoAndCover(filename string) error {
 	cmd := []string{
 		"$(docker run --rm -i -v",
 		Dir + ":/tmp",
 		"linuxserver/ffmpeg",
-		fmt.Sprintf("-i /tmp/test%d.mp4", cnt),
+		fmt.Sprintf("-i /tmp/%s.mp4", filename),
 		"-ss 00:00:05",
-		"-frames:v 1 test.png",
-		fmt.Sprintf("-c:a copy /tmp/test%d.png)", cnt),
+		"-frames:v 1 -vf scale=iw/4:ih/4 ",
+		fmt.Sprintf("/tmp/%s.png)", filename),
 	}
-	err := exec.Command("/bin/bash", "-c", strings.Join(cmd, " ")).Run()
+
+	c := exec.Command("/bin/bash", "-c", strings.Join(cmd, " "))
+	fmt.Println(c.String())
+	err := c.Run()
+	// fmt.Println("ffmpeg")
 	if err != nil {
+		fmt.Println(err.Error())
 		return err
 	}
+
+	vkey := "/covers/" + filename + ".png"
+	_, _, err = OssClient.Object.Upload(
+		context.Background(), vkey, fmt.Sprintf("%s/%s.png", Dir, filename), nil,
+	)
+	if err != nil {
+		fmt.Println("upload video error:", err)
+		return err
+	}
+	defer os.Remove(fmt.Sprintf("%s/%s.mp4", Dir, filename))
+	defer os.Remove(fmt.Sprintf("%s/%s.png", Dir, filename))
+
 	return nil
 }
 
@@ -199,5 +233,6 @@ func main() {
 	// CreateVideos()
 	// CreateLikes(1000)
 	// CreateRealations(1000)
-	CountComments()
+	// CountComments()
+	CountFavorite()
 }

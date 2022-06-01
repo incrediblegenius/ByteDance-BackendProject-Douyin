@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	addr := "root:root@tcp(localhost:3306)/douyin_user?charset=utf8mb4&parseTime=True&loc=Local"
+	addr := "root:root@tcp(113.54.157.200:3307)/douyin_user?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(addr), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
 			SingularTable: true,
