@@ -22,7 +22,6 @@ type User struct {
 }
 
 type Relation struct {
-	BaseModel
 	UserFrom   User `gorm:"foreignkey:FollowFrom"`
 	UserTo     User `gorm:"foreignkey:FollowTo"`
 	FollowFrom int  `gorm:"index:idx_follow_from_to,unique;type:int;not null"`

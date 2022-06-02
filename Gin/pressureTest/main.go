@@ -6,46 +6,64 @@ import (
 	"net/http"
 	"sync"
 	"time"
+
+	"github.com/namsral/flag"
 )
 
 var (
-	Geturl = []string{
-		"http://127.0.0.1:8080/douyin/user/?user_id=51&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6NTEsIkF1dGhvcml0eUlkIjowfQ.u8q99T62bLy8fH-TvtT1C--aP5OKBb3h_8UuJyoGIaU",
-		"http://127.0.0.1:8080/douyin/relation/follow/list/?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6NTEsIkF1dGhvcml0eUlkIjowfQ.u8q99T62bLy8fH-TvtT1C--aP5OKBb3h_8UuJyoGIaU&user_id=51",
-		"http://127.0.0.1:8080/douyin/publish/list/?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6NTEsIkF1dGhvcml0eUlkIjowfQ.u8q99T62bLy8fH-TvtT1C--aP5OKBb3h_8UuJyoGIaU&user_id=47",
-		"http://10.252.138.8:8080/douyin/feed?latest_time=1652864872162&token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6NTEsIkF1dGhvcml0eUlkIjowfQ.u8q99T62bLy8fH-TvtT1C--aP5OKBb3h_8UuJyoGIaU",
-		"http://10.252.138.8:8080/douyin/favorite/list/?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6NTEsIkF1dGhvcml0eUlkIjowfQ.u8q99T62bLy8fH-TvtT1C--aP5OKBb3h_8UuJyoGIaU&user_id=51",
-		"http://127.0.0.1:8080/douyin/comment/list/?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6NTEsIkF1dGhvcml0eUlkIjowfQ.u8q99T62bLy8fH-TvtT1C--aP5OKBb3h_8UuJyoGIaU&video_id=118",
-	}
+	url        string
+	concurency int
+	rounds     int
+	sleep      int
 )
 
+func init() {
+	flag.IntVar(&concurency, "c", 1, "concurency(max running routines)")
+	flag.IntVar(&rounds, "r", 1, "rounds(total requests)")
+	flag.IntVar(&sleep, "s", 0, "sleep(ms)")
+	flag.StringVar(&url, "url", "https://www.baidu.com", "test url")
+	flag.Parse()
+}
+
 func main() {
-	for _, url := range Geturl {
-		wg := sync.WaitGroup{}
-		syncChan := make(chan struct{}, 15000)
-		start := time.Now().Unix()
-		for i := 0; i < 20000; i++ {
-			wg.Add(1)
-			go func() {
-				defer wg.Done()
-				resp, err := http.Get(url)
-				if err != nil {
-					fmt.Println(err)
-					return
-				}
-				defer resp.Body.Close()
-				_, err = ioutil.ReadAll(resp.Body)
-				if err != nil {
-					fmt.Println(err)
-					return
-				}
-				syncChan <- struct{}{}
-			}()
+	fmt.Println("start")
+	fmt.Println("url:", url)
+	fmt.Println("concurency:", concurency)
+	fmt.Println("rounds:", rounds)
+	fmt.Println("sleep:", sleep)
+	wg := sync.WaitGroup{}
+	syncChan := make(chan struct{}, concurency)
+	start := time.Now().UnixNano()
+	cnt := 0 // 计数器
+	for i := 0; i < rounds; i++ {
+		if sleep != 0 {
+			time.Sleep(time.Millisecond * time.Duration(sleep))
 		}
-		wg.Wait()
-		end := time.Now().Unix()
-		fmt.Println(len(syncChan), "time cost", end-start)
+		wg.Add(1)
+		syncChan <- struct{}{}
+		cnt += 1
+		go func(cnt int) {
+			defer wg.Done()
+			defer func() {
+				<-syncChan
+			}()
+			resp, err := http.Get(url)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+			fmt.Println("No.", cnt, "StatusCode:", resp.StatusCode)
+			defer resp.Body.Close()
+			_, err = ioutil.ReadAll(resp.Body)
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+		}(cnt)
 	}
+	wg.Wait()
+	end := time.Now().UnixNano()
+	fmt.Println("time cost(nano)", end-start)
 	// resp, err := http.Post(url, "application/json", nil)
 	// if err != nil {
 	// 	panic(err)

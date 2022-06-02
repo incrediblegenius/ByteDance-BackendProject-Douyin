@@ -2,7 +2,7 @@ version: "3"
 
 services:
   user-srv:
-    image: "ccr.ccs.tencentyun.com/douyin-test/user-srv:v1.0"
+    image: "ccr.ccs.tencentyun.com/douyin-test/user-srv:v2.0"
     ports:
       - "8081:8080"
     environment:
@@ -13,7 +13,7 @@ services:
     restart: always
 
   relation-srv:
-    image: "ccr.ccs.tencentyun.com/douyin-test/relation-srv:v1.0"
+    image: "ccr.ccs.tencentyun.com/douyin-test/relation-srv:v2.0"
     ports:
       - "8082:8080"
     environment:
@@ -35,7 +35,7 @@ services:
     restart: always
 
   comment-srv:
-    image: "ccr.ccs.tencentyun.com/douyin-test/comment-srv:v1.0"
+    image: "ccr.ccs.tencentyun.com/douyin-test/comment-srv:v2.0"
     ports:
       - "8084:8080"
     environment:
@@ -46,7 +46,7 @@ services:
     restart: always
 
   favorite-srv:
-    image: "ccr.ccs.tencentyun.com/douyin-test/favorite-srv:v1.0"
+    image: "ccr.ccs.tencentyun.com/douyin-test/favorite-srv:v2.0"
     ports:
       - "8085:8080"
     environment:
@@ -57,7 +57,7 @@ services:
     restart: always
 
   publish-srv:
-    image: "ccr.ccs.tencentyun.com/douyin-test/publish-srv:v1.0"
+    image: "ccr.ccs.tencentyun.com/douyin-test/publish-srv:v2.0"
     ports:
       - "8086:8080"
     environment:

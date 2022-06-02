@@ -64,5 +64,12 @@ func InitDB() {
 	if err != nil {
 		panic(err)
 	}
+	// sqlDB, err := DB.DB()
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// sqlDB.SetMaxIdleConns(10)
+	// sqlDB.SetMaxOpenConns(1000)
 	fmt.Println("数据库连接成功")
+
 }
