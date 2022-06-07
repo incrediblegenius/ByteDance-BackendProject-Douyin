@@ -32,7 +32,6 @@ func Publish(ctx *gin.Context) {
 		})
 		return
 	}
-	defer f.Close()
 	if data.Size == 0 {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status_code": -1,
@@ -49,6 +48,7 @@ func Publish(ctx *gin.Context) {
 		})
 		return
 	}
+	err = f.Close()
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"status_code": -1,

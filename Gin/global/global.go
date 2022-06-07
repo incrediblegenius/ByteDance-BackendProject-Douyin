@@ -124,7 +124,7 @@ func InitSrvClient() {
 		// "127.0.0.1:8080",
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy": "round_robin"}`),
-		grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(1024*1024*10)),
+		grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(1024*1024*100)),
 		// grpc.WithBlock(),
 	); err != nil {
 		panic(err)

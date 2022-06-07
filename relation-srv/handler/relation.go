@@ -93,13 +93,14 @@ func (s *Server) RelationAction(ctx context.Context, req *proto.DouyinRelationAc
 }
 
 func (s *Server) RelationFollowList(ctx context.Context, req *proto.DouyinRelationFollowListRequest) (*proto.DouyinRelationFollowListResponse, error) {
-	_, err := global.Jwt.ParseToken(req.Token)
+	claim, err := global.Jwt.ParseToken(req.Token)
 	if err != nil {
 		return &proto.DouyinRelationFollowListResponse{
 			StatusCode: -2,
 			StatusMsg:  "token鉴权失败",
 		}, nil
 	}
+	uid := claim.Id
 	var relations []model.Relation
 	result := global.DB.Where("follow_from = ?", req.UserId).Find(&relations)
 	if result.RowsAffected == 0 {
@@ -113,9 +114,8 @@ func (s *Server) RelationFollowList(ctx context.Context, req *proto.DouyinRelati
 	for i, v := range relations {
 		user, _ := GetUserById(&Request{
 			Id:       int64(v.FollowTo),
-			SearchId: 0,
+			SearchId: uid,
 		})
-		user.IsFollow = true
 		userList[i] = user
 	}
 	return &proto.DouyinRelationFollowListResponse{
